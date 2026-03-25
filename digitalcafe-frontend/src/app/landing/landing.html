@@ -1,0 +1,261 @@
+<!-- NAVBAR -->
+<header class="navbar">
+<div class="logo">Savour</div>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#cafes">Cafes</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<div class="auth">
+  <button routerLink="/login" class="btn-outline">Login</button>
+  <button routerLink="/register" class="btn-fill">Register</button>
+</div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="overlay"></div>
+
+  <div class="hero-content">
+    <h1>Experience Luxury Dining Like Never Before</h1>
+    <p>Instant bookings. Verified cafes. Premium ambience.</p>
+    <div class="hero-buttons">
+      <button class="btn-fill">Book Now</button>
+      <button class="btn-outline">Explore Cafes</button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section about">
+  <div class="about-container">
+    <div class="about-text">
+      <h2>Why Choose Savour?</h2>
+      <p>
+        Savour connects you with trending cafes and restaurants in seconds.
+        No waiting, no hassle just smooth reservations and unforgettable experiences.
+      </p>
+
+      <div class="features">
+        <div class="feature">✔ Instant Booking</div>
+        <div class="feature">✔ Top Rated Cafes</div>
+        <div class="feature">✔ Elegant Atmosphere</div>
+      </div>
+    </div>
+
+    <div class="about-image">
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5">
+    </div>
+  </div>
+</section>
+
+<!-- CAFES -->
+<!-- HERO 2 (Zomato Style) -->
+<section class="hero2">
+
+  <!-- CURVED PATH -->
+  <svg class="path-line" viewBox="0 0 1440 800" preserveAspectRatio="none">
+    <path
+      d="M0,200 C300,50 500,350 800,200 S1200,100 1440,300"
+      fill="none"
+      stroke="#ff6b6b"
+      stroke-width="2"
+      stroke-dasharray="8,10"
+    />
+    <path
+      d="M0,500 C400,700 700,300 1100,500 S1400,700 1440,600"
+      fill="none"
+      stroke="#ff6b6b"
+      stroke-width="2"
+      stroke-dasharray="6,8"
+    />
+  </svg>
+
+  <!-- FOOD IMAGES -->
+  <img src="assets/images/burger.png" class="food burger">
+  <img src="assets/images/coffee.png" class="food coffee">
+  <img src="assets/images/noodle.png" class="food pizza">
+
+  <!-- TEXT -->
+  <div class="hero2-content">
+    <h1>Better food for <br> more people</h1>
+    <p>
+      Discover top cafes, book instantly, and enjoy premium dining
+      experience with Savour.
+    </p>
+  </div>
+
+</section>
+<div class="stats">
+
+  <div class="stat-box">
+    <h2 class="counter" data-target="300000">0</h2>
+    <p>restaurants</p>
+  </div>
+
+  <div class="stat-box">
+    <h2 class="counter" data-target="800">0</h2>
+    <p>cities</p>
+  </div>
+
+  <div class="stat-box">
+    <h2 class="counter" data-target="3000000000">0</h2>
+    <p>orders delivered</p>
+  </div>
+
+</div>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section testimonials">
+  <h2 class="title">What Our Customers Say</h2>
+
+  <div class="testimonial-container">
+
+    <div class="testimonial-card">
+      <img src="https://randomuser.me/api/portraits/women/44.jpg">
+      <h3>Priya Sharma</h3>
+      <div class="stars">★★★★★</div>
+      <p>“The ambience was magical and booking was so easy. Loved every moment!”</p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg">
+      <h3>Rahul Verma</h3>
+      <div class="stars">★★★★★</div>
+      <p>“Best café experience ever. Zero waiting and amazing service.”</p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="https://randomuser.me/api/portraits/women/65.jpg">
+      <h3>Ananya Iyer</h3>
+      <div class="stars">★★★★☆</div>
+      <p>“Beautiful recommendations and smooth booking system.”</p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="https://randomuser.me/api/portraits/men/52.jpg">
+      <h3>Karthik Raj</h3>
+      <div class="stars">★★★★★</div>
+      <p>“Savour made our family dinner stress-free and memorable.”</p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="https://randomuser.me/api/portraits/women/22.jpg">
+      <h3>Meera Nair</h3>
+      <div class="stars">★★★★★</div>
+      <p>“Highly recommend Savour for anyone who loves premium dining.”</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact" class="section contact">
+
+  <div class="contact-container">
+
+    <!-- LEFT -->
+    <div class="contact-details">
+      <h2>Contact Savour</h2>
+
+      <p class="subtitle">
+        Have questions about reservations or partnerships?
+        Our team will respond within 24 hours.
+      </p>
+
+      <div class="detail">
+        <h4>Email</h4>
+        <p>Savaour@gmail.com</p>
+      </div>
+
+      <div class="detail">
+        <h4>Phone</h4>
+        <p>+91 123456789</p>
+      </div>
+
+      <div class="detail">
+        <h4>Office Address</h4>
+        <p>ABC Colony<br>Sivakasi, Tamil Nadu</p>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <form (ngSubmit)="submitForm()" class="contact-form">
+
+      <input type="text"
+             [(ngModel)]="form.name"
+             name="name"
+             placeholder="Full Name"
+             required>
+
+      <input type="email"
+             [(ngModel)]="form.email"
+             name="email"
+             placeholder="Email Address"
+             required>
+
+      <input type="text"
+             [(ngModel)]="form.subject"
+             name="subject"
+             placeholder="Subject">
+
+      <textarea [(ngModel)]="form.message"
+                name="message"
+                placeholder="Your Message"
+                required></textarea>
+
+      <button type="submit">Send Message</button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-grid">
+
+    <div class="foot-box">
+      <h4>📍 Address</h4>
+      <p>
+        A108 Adam Street<br>
+        New York, NY 535022
+      </p>
+    </div>
+
+    <div class="foot-box">
+      <h4>📞 Contact</h4>
+      <p><b>Phone:</b> +1 5589 55488 55</p>
+      <p><b>Email:</b> info@example.com</p>
+    </div>
+
+    <div class="foot-box">
+      <h4>🕒 Opens</h4>
+      <p><b>24 Hrs</b> </p>
+    </div>
+
+    <div class="foot-box">
+      <h4>Follow Us</h4>
+      <div class="socials">
+        <span>𝕏</span>
+        <span>f</span>
+        <span>◎</span>
+        <span>in</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 Savour | All Rights Reserved
+  </div>
+
+</footer>

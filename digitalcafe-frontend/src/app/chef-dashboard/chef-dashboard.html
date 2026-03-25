@@ -1,0 +1,625 @@
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2 class="cafe-name">{{cafeName}}</h2>
+
+    <ul class="menu">
+
+      <li (click)="view='today'">
+        <span class="material-icons">restaurant</span>
+        Today Orders
+      </li>
+
+      <li (click)="view='upcoming'">
+        <span class="material-icons">schedule</span>
+        Upcoming Orders
+      </li>
+
+      <li (click)="view='completed'">
+        <span class="material-icons">task_alt</span>
+        Completed Orders
+      </li>
+
+      <li (click)="view='profile'">
+        <span class="material-icons">person</span>
+        Profile
+      </li>
+
+    </ul>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="material-icons">logout</span>
+      Logout
+    </button>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="welcome-bar">
+      <div class="welcome-left">
+        <div class="welcome-icon">
+          <span class="material-icons">room_service</span>
+        </div>
+        <div class="welcome-info">
+          <h2 class="welcome-title">Welcome, {{profile.firstName}}!</h2>
+          <p class="welcome-sub">Here are the orders ready for preparing today</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- TODAY ORDERS -->
+    <div *ngIf="view==='today'" class="today-wrapper">
+
+      <!-- HEADER -->
+      <div class="today-header">
+
+        <h2 class="title">Today's Orders</h2>
+        <!-- TOTAL ORDERS -->
+
+        <div class="filters">
+          <div class="total-orders">
+            <span class="material-icons">inventory_2</span>
+            <span>Total Orders</span>
+            <b>{{todayOrders.length}}</b>
+          </div>
+          <button (click)="setFilter('ALL')" [class.active]="filter==='ALL'">
+            <span class="material-icons">list</span>
+            All
+          </button>
+
+          <button (click)="setFilter('PENDING')" [class.active]="filter==='PENDING'">
+            <span class="material-icons">hourglass_empty</span>
+            Pending
+          </button>
+
+          <button (click)="setFilter('PREPARING')" [class.active]="filter==='PREPARING'">
+            <span class="material-icons">restaurant</span>
+            Preparing
+          </button>
+
+          <button (click)="setFilter('COMPLETED')" [class.active]="filter==='COMPLETED'">
+            <span class="material-icons">check_circle</span>
+            Completed
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- GRID -->
+      <div class="orders-grid">
+
+        <div *ngFor="let order of filteredTodayOrders"
+             class="order-card today-card"
+             [ngClass]="{
+           'border-red': order.chefStatus==='PENDING',
+           'border-orange': order.chefStatus==='PREPARING',
+           'border-green': order.chefStatus==='COMPLETED'
+         }"
+             (click)="openOrder(order)">
+          <div class="card-header brown">
+
+            <div><b>Table {{order.tableNo}}</b></div>
+            <div>Order {{order.orderId}}</div>
+            <div>{{order.bookingDate}} {{order.bookingTime}}</div>
+
+          </div>
+
+          <div class="menu-items">
+
+            <div *ngFor="let item of order.items | slice:0:4">
+              {{item.qty}} x {{item.menuName}}
+            </div>
+
+            <div *ngIf="order.items.length > 4" class="view-more">
+              View Full Menu
+            </div>
+
+          </div>
+
+          <button class="status-btn"
+                  [ngClass]="{
+          'pending-btn': order.chefStatus==='PENDING',
+          'preparing-btn': order.chefStatus==='PREPARING',
+          'completed-btn': order.chefStatus==='COMPLETED'
+        }"
+                  (click)="changeStatus(order); $event.stopPropagation()">
+
+            {{order.chefStatus}}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- UPCOMING ORDERS -->
+    <!-- UPCOMING ORDERS -->
+
+    <div *ngIf="view==='upcoming'">
+      <div class="upcoming-header">
+
+        <h2 class="title">
+          <span class="material-icons">schedule</span>
+          Upcoming Orders
+        </h2>
+
+        <div class="upcoming-controls">
+
+          <!-- DATE PICKER -->
+          <div class="date-picker">
+            <span class="material-icons">calendar_month</span>
+            <input type="date"
+                   [(ngModel)]="selectedDate"
+                   (change)="filterUpcomingByDate()">
+          </div>
+
+          <!-- TOTAL UPCOMING CARD -->
+          <div class="upcoming-count">
+
+            <span class="material-icons icon">inventory_2</span>
+
+            <span class="title1">Total Upcoming</span>
+
+            <span class="count">{{upcomingOrders.length}}</span>
+
+          </div>
+
+        </div>
+
+      </div>
+      <div class="orders-grid">
+
+        <div *ngFor="let order of paginatedUpcomingOrders"
+             class="order-card upcoming-card"
+             (click)="openOrder(order)">
+
+          <div class="card-header yellow">
+
+            <div><b>Table {{order.tableNo}}</b></div>
+            <div>Order {{order.orderId}}</div>
+            <div>{{order.bookingDate}} {{order.bookingTime}}</div>
+
+          </div>
+
+          <div class="menu-items">
+
+            <div *ngFor="let item of order.items ?? [] | slice:0:4">
+              {{item.qty}} x {{item.menuName}}
+            </div>
+
+            <div *ngIf="order.items.length > 4" class="view-more">
+              View Full Menu
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGINATION -->
+
+      <div class="pagination" *ngIf="upcomingTotalPages > 1">
+
+        <button
+          (click)="changeUpcomingPage(upcomingCurrentPage-1)"
+          [disabled]="upcomingCurrentPage===1">
+          ‹
+        </button>
+
+        <button
+          *ngFor="let p of visibleUpcomingPages"
+          (click)="changeUpcomingPage(p)"
+          [class.active]="p===upcomingCurrentPage">
+
+          {{p}}
+
+        </button>
+
+        <button
+          (click)="changeUpcomingPage(upcomingCurrentPage+1)"
+          [disabled]="upcomingCurrentPage===upcomingTotalPages">
+          ›
+        </button>
+
+      </div>
+
+    </div>
+    <!-- COMPLETED ORDERS -->
+
+    <div *ngIf="view==='completed'" class="table-box">
+
+      <!-- Header -->
+      <div class="completed-header">
+        <h2 class="title">Completed Orders</h2>
+        <div class="completed-controls">
+          <!-- In your completed section, replace the date-picker div -->
+          <div class="date-picker">
+            <span class="material-icons">calendar_month</span>
+            <input type="date"
+                   [(ngModel)]="completedSelectedDate"
+                   (ngModelChange)="applyCompletedFilter()">
+          </div>
+          <button class="clear-date-btn" (click)="clearCompletedDate()">Clear</button>
+          <div class="completed-count">
+            <span class="material-icons">inventory_2</span>
+            <span>Total</span>
+            <b>{{ completedOrders.length }}</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table class="order-table">
+        <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Table</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let order of paginatedCompletedOrders">
+          <td>{{ order.orderId }}</td>
+          <td>{{ order.tableNo }}</td>
+          <td>{{ order.bookingDate }}</td>
+          <td>{{ order.bookingTime }}</td>
+          <td><span class="status completed">{{ order.chefStatus }}</span></td>
+        </tr>
+        <tr *ngIf="paginatedCompletedOrders.length === 0">
+          <td colspan="5" style="text-align:center; padding:40px; color:#94a3b8;">
+            No completed orders found
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Replace your pagination div -->
+      <div class="pagination completed-pagination">
+        <button
+          (click)="changeCompletedPage(completedCurrentPage - 1)"
+          [disabled]="completedCurrentPage === 1">‹</button>
+
+        <button *ngIf="completedCurrentPage > 2"
+                (click)="changeCompletedPage(1)"
+                [class.active]="completedCurrentPage === 1">1</button>
+
+        <span *ngIf="completedCurrentPage > 3" class="pg-ellipsis">…</span>
+
+        <button *ngFor="let p of visibleCompletedPages"
+                (click)="changeCompletedPage(p)"
+                [class.active]="p === completedCurrentPage">{{ p }}</button>
+
+        <span *ngIf="completedCurrentPage < completedTotalPages - 2" class="pg-ellipsis">…</span>
+
+        <button *ngIf="completedCurrentPage < completedTotalPages - 1"
+                (click)="changeCompletedPage(completedTotalPages)"
+                [class.active]="completedCurrentPage === completedTotalPages">{{ completedTotalPages }}</button>
+
+        <button
+          (click)="changeCompletedPage(completedCurrentPage + 1)"
+          [disabled]="completedCurrentPage === completedTotalPages">›</button>
+      </div>
+
+    </div>
+    <!-- PROFILE SECTION -->
+
+    <div *ngIf="view==='profile'" class="profile-container">
+
+      <div class="profile-header">
+
+        <!-- LEFT PROFILE ICON -->
+        <div class="profile-left">
+
+          <div class="profile-icon">
+
+      <span class="material-icons" *ngIf="profile.role==='CHEF'">
+        restaurant
+      </span>
+
+            <span class="material-icons" *ngIf="profile.role==='WAITER'">
+        room_service
+      </span>
+
+          </div>
+
+          <div class="profile-info">
+
+            <h2>{{profile.firstName}} {{profile.lastName}}</h2>
+
+            <p>{{profile.email}}</p>
+
+            <div class="role-row">
+
+              <span class="role">{{profile.role}}</span>
+
+              <span class="approved">Approved</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <button class="edit-btn"
+                (click)="isEditMode=true"
+                *ngIf="!isEditMode">
+          Edit
+        </button>
+
+      </div>
+
+      <!-- PERSONAL DETAILS -->
+
+      <div class="section">
+
+        <h3>Personal Details</h3>
+
+        <div class="grid">
+
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text"
+                   [(ngModel)]="profile.firstName"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text"
+                   [(ngModel)]="profile.lastName"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date"
+                   [(ngModel)]="profile.dob"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <select [(ngModel)]="profile.gender"
+                    [disabled]="!isEditMode">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text"
+                   [(ngModel)]="profile.phone"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text"
+                   [(ngModel)]="profile.email"
+                   readonly>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ADDRESS -->
+
+      <div class="section">
+
+        <h3>Address Details</h3>
+
+        <div class="grid">
+
+          <div class="form-group">
+            <label>Door No</label>
+            <input type="text"
+                   [(ngModel)]="profile.doorNo"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text"
+                   [(ngModel)]="profile.address"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>City</label>
+            <input type="text"
+                   [(ngModel)]="profile.city"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>State</label>
+            <input type="text"
+                   [(ngModel)]="profile.state"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text"
+                   [(ngModel)]="profile.pincode"
+                   [readonly]="!isEditMode">
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- EDUCATION DETAILS -->
+
+      <div class="section">
+
+        <h3>Education Details</h3>
+
+        <div *ngFor="let edu of profile.educationDetails; let i=index" class="card-box">
+
+          <div class="grid">
+
+            <div class="form-group">
+              <label>School</label>
+              <input type="text"
+                     [(ngModel)]="edu.school"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Degree</label>
+              <input type="text"
+                     [(ngModel)]="edu.degree"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Year</label>
+              <input type="text"
+                     [(ngModel)]="edu.year"
+                     [readonly]="!isEditMode">
+            </div>
+
+          </div>
+
+          <div class="card-actions" *ngIf="isEditMode">
+
+            <button class="add-btn" (click)="addEducation()">
+              + Add
+            </button>
+
+            <button class="remove-btn" (click)="removeEducation(i)">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <!-- WORK EXPERIENCE -->
+
+      <div class="section">
+
+        <h3>Work Experience</h3>
+
+        <div *ngFor="let work of profile.workDetails; let i=index" class="card-box">
+
+          <div class="grid">
+
+            <div class="form-group">
+              <label>Company</label>
+              <input type="text"
+                     [(ngModel)]="work.company"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Role</label>
+              <input type="text"
+                     [(ngModel)]="work.role"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Experience</label>
+              <input type="text"
+                     [(ngModel)]="work.experience"
+                     [readonly]="!isEditMode">
+            </div>
+
+          </div>
+          <div class="card-actions" *ngIf="isEditMode">
+
+            <button class="add-btn" (click)="addWork()">
+              + Add
+            </button>
+
+            <button class="remove-btn" (click)="removeWork(i)">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <!-- DOCUMENTS -->
+
+      <div class="section">
+
+        <h3>Documents</h3>
+
+        <div class="form-group">
+
+          <label>Government ID</label>
+
+          <div class="doc-row">
+
+            <input type="file" *ngIf="isEditMode">
+
+            <button *ngIf="!isEditMode" class="view-btn">
+              <span class="material-icons">visibility</span>
+            </button>
+
+            <button *ngIf="isEditMode" class="remove-btn">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SAVE BUTTON -->
+
+      <div class="save-section" *ngIf="isEditMode">
+
+        <button class="save-btn" (click)="saveProfile()">
+          Save Changes
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- POPUP MENU -->
+
+<div class="popup" *ngIf="selectedOrder">
+
+  <div class="popup-card">
+
+    <h2>Order {{selectedOrder.orderId}}</h2>
+
+    <div *ngFor="let item of selectedOrder?.items">
+      {{item.qty}} x {{item.menuName}}
+    </div>
+    <button (click)="selectedOrder=null">Close</button>
+
+  </div>
+
+</div>

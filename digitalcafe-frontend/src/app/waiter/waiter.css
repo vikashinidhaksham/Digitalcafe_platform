@@ -1,0 +1,558 @@
+/* ================================================================
+   BREW HAVEN — WAITER DASHBOARD
+   Exact match to Chef Dashboard orange theme
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --orange-50:  #fff8f1; --orange-100: #ffedd8; --orange-200: #fed7aa;
+  --orange-400: #fb923c; --orange-500: #f97316; --orange-600: #ea6c0a; --orange-700: #c2540a;
+  --bg: #f5f7fa; --surface: #ffffff; --surface-2: #f2f4f7;
+  --border: #e4e8ed; --border-soft: #f0f2f5;
+  --text-primary: #1a1d23; --text-secondary: #4a5568; --text-muted: #94a3b8;
+  --success: #10b981; --success-bg: #ecfdf5;
+  --danger: #ef4444; --danger-bg: #fef2f2;
+  --warning: #f59e0b; --warning-bg: #fffbeb;
+  --sidebar-w: 230px; --radius: 14px; --radius-sm: 10px;
+  --shadow-xs: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 8px 24px rgba(0,0,0,0.09);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: #f5f7fa !important;
+  color: #1a1d23 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #fed7aa; border-radius: 99px; }
+
+/* ── LAYOUT ── */
+.container {
+  display: block !important;
+  min-height: 100vh !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: #f5f7fa !important;
+}
+
+/* ━━━ SIDEBAR ━━━ */
+.sidebar {
+  width: 230px !important; min-width: 230px !important; max-width: 230px !important;
+  position: fixed !important; top: 0 !important; left: 0 !important; height: 100vh !important;
+  background: rgba(249,115,22,0.055) !important; background-image: none !important;
+  border-right: 1.5px solid rgba(249,115,22,0.13) !important;
+  padding: 0 !important; flex-shrink: 0 !important;
+  display: flex !important; flex-direction: column !important;
+  overflow-y: auto !important;
+  box-shadow: 2px 0 10px rgba(249,115,22,0.07) !important;
+  z-index: 50 !important;
+}
+
+.cafe-name {
+  font-size: 20px !important; font-weight: 800 !important;
+  color: #ea6c0a !important; -webkit-text-fill-color: #ea6c0a !important;
+  padding: 26px 22px 18px !important;
+  border-bottom: 1px solid rgba(249,115,22,0.12) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: none !important; background-image: none !important;
+  margin-bottom: 0 !important; letter-spacing: -0.2px !important;
+}
+
+.menu-section { flex: 1 !important; }
+
+.menu {
+  list-style: none !important;
+  padding: 14px 10px !important; margin: 0 !important;
+}
+
+.menu li {
+  display: flex !important; align-items: center !important; gap: 11px !important;
+  padding: 11px 14px !important; border-radius: 10px !important;
+  margin-bottom: 3px !important; cursor: pointer !important;
+  font-size: 13.5px !important; font-weight: 500 !important;
+  color: #4a5568 !important; font-family: 'Plus Jakarta Sans', sans-serif !important;
+  transition: all 0.18s ease !important; position: relative !important;
+  background: transparent !important; transform: none !important;
+}
+
+.menu li .material-icons {
+  font-size: 19px !important; color: #fb923c !important;
+  flex-shrink: 0 !important;
+}
+
+.menu li:hover {
+  color: #ea6c0a !important;
+  background: rgba(249,115,22,0.09) !important;
+  transform: translateX(4px) !important;
+}
+.menu li:hover .material-icons { color: #f97316 !important; }
+
+.logout-item {
+  color: #ef4444 !important;
+  background: rgba(239,68,68,0.06) !important;
+  margin-top: 16px !important;
+}
+.logout-item .material-icons { color: #ef4444 !important; }
+.logout-item:hover {
+  background: rgba(239,68,68,0.13) !important;
+  color: #dc2626 !important;
+  transform: translateX(4px) !important;
+}
+
+.logout-btn {
+  display: flex !important; align-items: center !important;
+  justify-content: center !important; gap: 9px !important;
+  margin: 12px !important; padding: 12px 16px !important;
+  border: none !important; border-radius: 10px !important;
+  background: rgba(239,68,68,0.08) !important;
+  color: #ef4444 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 600 !important; font-size: 14px !important;
+  cursor: pointer !important; transition: all 0.18s !important;
+}
+.logout-btn .material-icons { color: #ef4444 !important; }
+.logout-btn:hover { background: rgba(239,68,68,0.14) !important; }
+
+/* ━━━ MAIN CONTENT ━━━ */
+.content {
+  margin-left: 230px !important; width: calc(100% - 230px) !important;
+  padding: 30px 34px !important; background: #f5f7fa !important;
+  min-height: 100vh !important; box-sizing: border-box !important;
+  position: relative !important; z-index: 1 !important; float: none !important;
+}
+
+.title1 {
+  font-size: 22px !important; font-weight: 800 !important;
+  color: #1a1d23 !important; letter-spacing: -0.4px !important;
+  margin-bottom: 22px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* ━━━ ORDER CARDS ━━━ */
+.orders-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 18px !important;
+}
+
+.order-card {
+  background: #ffffff !important; background-color: #ffffff !important;
+  background-image: none !important;
+  border-radius: 14px !important; overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  cursor: pointer !important;
+  display: flex !important; flex-direction: column !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  border: 1.5px solid #e4e8ed !important;
+}
+.order-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.09) !important;
+  border-color: #fed7aa !important;
+}
+
+/* Card header — orange gradient */
+.card-header,
+.card-header.brown {
+  padding: 16px 18px !important;
+  background: #ea6c0a !important; background-color: #ea6c0a !important;
+  background-image: linear-gradient(135deg, #ea6c0a 0%, #c2540a 100%) !important;
+  color: #ffffff !important; border-bottom: none !important;
+}
+.card-header * { color: #ffffff !important; }
+.card-header b {
+  font-size: 17px !important; font-weight: 700 !important;
+  display: block !important; margin-bottom: 3px !important; color: #ffffff !important;
+}
+.card-header div {
+  font-size: 12.5px !important; color: rgba(255,255,255,0.88) !important;
+  margin-top: 2px !important; background: transparent !important;
+}
+
+/* Menu items body */
+.menu-items {
+  padding: 16px 18px !important; flex: 1 !important;
+  background: #ffffff !important; background-color: #ffffff !important;
+  font-size: 13.5px !important; color: #1a1d23 !important;
+  line-height: 1.75 !important; border-bottom: 1px solid #f0f2f5 !important;
+}
+.menu-items div {
+  font-size: 13.5px !important; font-weight: 500 !important;
+  color: #1a1d23 !important; margin-bottom: 2px !important; background: transparent !important;
+}
+
+/* ━━━ STATUS BUTTONS ━━━ */
+.btn-area { padding: 14px 18px !important; background: #ffffff !important; }
+
+.status-btn {
+  width: 100% !important; padding: 11px !important; border: none !important;
+  border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 700 !important; cursor: pointer !important;
+  letter-spacing: 0.5px !important; text-transform: uppercase !important;
+  transition: all 0.2s !important; display: block !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+
+/* READY — orange tint */
+.status-btn.ready {
+  background: rgba(249,115,22,0.12) !important;
+  color: #c2540a !important;
+  border: 1.5px solid rgba(249,115,22,0.35) !important;
+}
+.status-btn.ready:hover {
+  background: rgba(249,115,22,0.22) !important;
+  border-color: #f97316 !important; transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(249,115,22,0.25) !important;
+}
+
+/* SERVED — green tint */
+.status-btn.served {
+  background: rgba(16,185,129,0.10) !important;
+  color: #059669 !important;
+  border: 1.5px solid rgba(16,185,129,0.28) !important;
+  cursor: not-allowed !important; opacity: 0.85 !important;
+}
+
+/* PENDING */
+.status-btn.pending {
+  background: rgba(239,68,68,0.10) !important;
+  color: #dc2626 !important;
+  border: 1.5px solid rgba(239,68,68,0.28) !important;
+}
+
+/* ━━━ RESERVATION SECTION ━━━ */
+.reservationWrapper { width: 100% !important; }
+
+.reservationCards {
+  display: flex !important; gap: 16px !important;
+  margin: 0 0 22px 0 !important; flex-wrap: wrap !important;
+}
+
+.resCard {
+  flex: 1 !important;
+  background: #ffffff !important; background-color: #ffffff !important;
+  border-radius: 14px !important; padding: 24px !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  text-align: center !important; border: 1.5px solid #e4e8ed !important;
+  position: relative !important; min-width: 140px !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.resCard:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.09) !important; }
+
+.resCard h2 {
+  font-size: 30px !important; font-weight: 800 !important;
+  margin: 0 0 4px 0 !important; line-height: 1 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.resCard p {
+  font-size: 12px !important; color: #94a3b8 !important;
+  font-weight: 600 !important; letter-spacing: 0.4px !important;
+  text-transform: uppercase !important; margin: 0 !important;
+}
+
+.todayCard     { border-left: 4px solid #ef4444 !important; }
+.todayCard h2  { color: #dc2626 !important; }
+.upcomingCard  { border-left: 4px solid #f59e0b !important; }
+.upcomingCard h2 { color: #b45309 !important; }
+.completedCard { border-left: 4px solid #10b981 !important; }
+.completedCard h2 { color: #059669 !important; }
+
+/* Filter bar */
+.reservationFilterBar {
+  display: flex !important; gap: 12px !important;
+  margin-bottom: 18px !important; flex-wrap: wrap !important; align-items: center !important;
+}
+.reservationFilterBar input,
+.reservationFilterBar select {
+  padding: 9px 14px !important; border-radius: 99px !important;
+  border: 1.5px solid #e4e8ed !important; background: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; color: #1a1d23 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important; transition: border-color 0.18s !important;
+}
+.reservationFilterBar input:focus,
+.reservationFilterBar select:focus {
+  outline: none !important; border-color: #fb923c !important;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.10) !important;
+}
+.reservationFilterBar input::placeholder { color: #94a3b8 !important; }
+
+/* ━━━ TABLE ━━━ */
+.tableCard {
+  background: #ffffff !important; padding: 0 !important;
+  border-radius: 14px !important; border: 1.5px solid #e4e8ed !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  overflow: hidden !important; width: 100% !important;
+}
+
+.modernTable {
+  width: 100% !important; border-collapse: collapse !important;
+  background: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.modernTable thead { background: #f2f4f7 !important; }
+.modernTable th {
+  text-align: left !important; padding: 13px 20px !important;
+  font-size: 11px !important; font-weight: 700 !important;
+  letter-spacing: 0.8px !important; text-transform: uppercase !important;
+  color: #94a3b8 !important; border-bottom: 1.5px solid #e4e8ed !important;
+  background: #f2f4f7 !important;
+}
+.modernTable td {
+  padding: 14px 20px !important; font-size: 13.5px !important;
+  color: #1a1d23 !important; vertical-align: middle !important;
+}
+
+/* Alternating rows */
+.modernTable tbody tr:nth-child(odd)  { background: #ffffff !important; }
+.modernTable tbody tr:nth-child(even) { background: rgba(249,115,22,0.04) !important; }
+.modernTable tbody tr:hover           { background: rgba(249,115,22,0.09) !important; }
+.modernTable tbody tr { border-bottom: 1px solid #f0f2f5 !important; transition: background 0.12s !important; }
+.modernTable tbody tr:last-child { border-bottom: none !important; }
+
+/* Status badges */
+.statusBadge {
+  display: inline-flex !important; align-items: center !important;
+  padding: 5px 14px !important; border-radius: 99px !important;
+  font-size: 11px !important; font-weight: 700 !important;
+  letter-spacing: 0.5px !important; text-transform: uppercase !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.statusToday    { background: rgba(239,68,68,0.10) !important;  color: #dc2626 !important; border: 1.5px solid rgba(239,68,68,0.25) !important; }
+.statusUpcoming { background: rgba(245,158,11,0.10) !important; color: #b45309 !important; border: 1.5px solid rgba(245,158,11,0.25) !important; }
+.statusCompleted{ background: rgba(249,115,22,0.10) !important; color: #c2540a !important; border: 1.5px solid rgba(249,115,22,0.28) !important; }
+
+/* ━━━ PAGINATION ━━━ */
+.paginationWrapper {
+  display: flex !important; justify-content: center !important;
+  align-items: center !important; gap: 8px !important;
+  padding: 18px !important; border-top: 1px solid #f0f2f5 !important;
+}
+.paginationWrapper button {
+  min-width: 36px !important; height: 36px !important; padding: 6px 10px !important;
+  border: 1.5px solid #e4e8ed !important; border-radius: 8px !important;
+  background: #ffffff !important; color: #4a5568 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  transition: all 0.18s !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+.paginationWrapper button:hover:not(:disabled) {
+  background: #f97316 !important; border-color: #f97316 !important; color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(249,115,22,0.3) !important;
+}
+.paginationWrapper button.active {
+  background: #f97316 !important; border-color: #f97316 !important; color: #ffffff !important;
+}
+.paginationWrapper button:disabled { opacity: 0.3 !important; cursor: not-allowed !important; }
+.paginationWrapper .navBtn { font-size: 18px !important; padding: 0 12px !important; }
+
+/* ━━━ PROFILE ━━━ */
+.profile-container { padding: 0 !important; background: transparent !important; max-width: 860px !important; }
+
+.profile-header {
+  display: flex !important; justify-content: space-between !important; align-items: center !important;
+  margin-bottom: 18px !important; padding: 24px 28px !important;
+  background: #ffffff !important; border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important; box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+.profile-left { display: flex !important; align-items: center !important; gap: 18px !important; }
+.profile-icon {
+  width: 66px !important; height: 66px !important; border-radius: 16px !important;
+  background: #ffedd8 !important; display: flex !important;
+  align-items: center !important; justify-content: center !important;
+  font-size: 30px !important; color: #f97316 !important;
+  border: 2px solid #fed7aa !important; flex-shrink: 0 !important;
+}
+.profile-icon .material-icons { color: #f97316 !important; font-size: 30px !important; }
+.profile-info h2 {
+  font-size: 20px !important; font-weight: 800 !important;
+  color: #1a1d23 !important; margin: 0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.profile-info p { font-size: 13px !important; color: #94a3b8 !important; margin-top: 3px !important; }
+.role-row { display: flex !important; gap: 8px !important; margin-top: 8px !important; align-items: center !important; }
+
+.role {
+  font-weight: 700 !important; font-size: 11px !important; color: #ea6c0a !important;
+  background: #fff8f1 !important; border: 1.5px solid #fed7aa !important;
+  padding: 4px 14px !important; border-radius: 99px !important;
+  letter-spacing: 0.5px !important; text-transform: uppercase !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.approved {
+  background: #ecfdf5 !important; color: #10b981 !important;
+  padding: 4px 14px !important; border-radius: 99px !important;
+  font-size: 11px !important; font-weight: 700 !important;
+  border: 1.5px solid rgba(16,185,129,0.25) !important;
+  text-transform: uppercase !important; letter-spacing: 0.5px !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+
+.section {
+  background: #ffffff !important; padding: 24px 28px !important;
+  border-radius: 16px !important; margin-bottom: 16px !important;
+  border: 1.5px solid #e4e8ed !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+.section h3 {
+  font-size: 15px !important; font-weight: 700 !important; color: #1a1d23 !important;
+  margin-bottom: 18px !important; padding-bottom: 12px !important;
+  border-bottom: 1.5px solid #f0f2f5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 18px 24px !important; margin-top: 4px !important; }
+.form-group { display: flex !important; flex-direction: column !important; width: 100% !important; }
+.form-group label {
+  font-weight: 700 !important; font-size: 11px !important; color: #94a3b8 !important;
+  letter-spacing: 0.7px !important; text-transform: uppercase !important; margin-bottom: 7px !important;
+}
+.form-group input,
+.form-group select {
+  padding: 12px 16px !important; border-radius: 10px !important;
+  border: 1.5px solid #e4e8ed !important; background: #f5f7fa !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important; color: #1a1d23 !important;
+  width: 100% !important; box-sizing: border-box !important; transition: all 0.18s !important;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none !important; border-color: #fb923c !important;
+  background: #ffffff !important; box-shadow: 0 0 0 3px rgba(249,115,22,0.12) !important;
+}
+.form-group input[readonly], .form-group select[disabled] {
+  background: #f5f7fa !important; color: #4a5568 !important; cursor: default !important;
+}
+
+/* Buttons */
+.edit-btn {
+  background: #f97316 !important; color: #ffffff !important; border: none !important;
+  padding: 11px 28px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important; font-weight: 700 !important; cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.38) !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.edit-btn:hover { background: #ea6c0a !important; transform: translateY(-1px) !important; }
+
+.save-btn {
+  background: #f97316 !important; color: #ffffff !important; border: none !important;
+  padding: 13px 36px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important; font-weight: 700 !important; cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.4) !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.save-btn:hover { background: #ea6c0a !important; transform: translateY(-1px) !important; }
+
+.add-btn {
+  background: #fff8f1 !important; color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important; padding: 9px 20px !important;
+  border-radius: 99px !important; font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.add-btn:hover { background: #ffedd8 !important; }
+
+.remove-btn {
+  background: #fef2f2 !important; color: #ef4444 !important;
+  border: 1.5px solid rgba(239,68,68,0.3) !important; padding: 9px 20px !important;
+  border-radius: 99px !important; font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+
+.view-btn {
+  background: #fff8f1 !important; color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important; padding: 9px 20px !important;
+  border-radius: 99px !important; font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  display: inline-flex !important; align-items: center !important; gap: 6px !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+.view-btn .material-icons { font-size: 16px !important; color: #ea6c0a !important; }
+
+.card-actions { display: flex !important; gap: 12px !important; margin-top: 16px !important; padding-top: 14px !important; border-top: 1px solid #f0f2f5 !important; }
+.save-section { text-align: center !important; margin-top: 24px !important; padding: 24px !important; background: #ffffff !important; border-radius: 16px !important; border: 1.5px solid #e4e8ed !important; }
+.doc-row { display: flex !important; align-items: center !important; gap: 14px !important; margin-top: 8px !important; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) { .orders-grid { grid-template-columns: repeat(2,1fr) !important; } .grid { grid-template-columns: 1fr !important; } }
+@media (max-width: 700px) {
+  .sidebar { position: relative !important; width: 100% !important; height: auto !important; max-width: 100% !important; }
+  .content { margin-left: 0 !important; width: 100% !important; padding: 20px !important; }
+  .orders-grid { grid-template-columns: 1fr !important; }
+  .reservationCards { flex-direction: column !important; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WELCOME TOPBAR — Orders Today page
+   Add this HTML at the top of the orders view:
+
+   <div class="welcome-bar">
+     <div class="welcome-left">
+       <div class="welcome-icon">
+         <span class="material-icons">room_service</span>
+       </div>
+       <div class="welcome-info">
+         <h2 class="welcome-title">Welcome, {{profile.firstName}}!</h2>
+         <p class="welcome-sub">Here are the orders ready for serving today</p>
+       </div>
+     </div>
+   </div>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.welcome-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  padding: 20px 28px !important;
+  margin-bottom: 24px !important;
+}
+
+.welcome-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+}
+
+.welcome-icon {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 14px !important;
+  background: #ffedd8 !important;
+  background-color: #ffedd8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #fed7aa !important;
+  flex-shrink: 0 !important;
+}
+
+.welcome-icon .material-icons {
+  font-size: 26px !important;
+  color: #f97316 !important;
+}
+
+.welcome-title {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #1a1d23 !important;
+  letter-spacing: -0.3px !important;
+  margin: 0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.welcome-sub {
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+  margin-top: 3px !important;
+  font-weight: 400 !important;
+}

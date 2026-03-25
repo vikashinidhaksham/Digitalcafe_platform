@@ -1,0 +1,339 @@
+
+
+
+<div>
+  <!-- ================= NAVBAR ================= -->
+  <div class="navbar">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <i class="fa fa-utensils"></i>
+      </div>
+
+      <div class="logo-text">
+        Savour
+        <span class="logo-sub">Taste the Moment</span>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+
+    <span
+      [class.active]="currentView === 'details'"
+      (click)="goToDetails()">
+      Details
+    </span>
+
+      <span
+        [class.active]="currentView === 'menu'"
+        (click)="openMenuPage()">
+      Menu
+    </span>
+
+      <span
+        [class.active]="currentView === 'menu'"
+        (click)="openMenuPage()">
+      Cart ({{cart.length}})
+    </span>
+
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- ================= DETAILS PAGE ======================= -->
+  <!-- ===================================================== -->
+
+  <div *ngIf="currentView === 'details'">
+
+    <!-- HERO IMAGE -->
+    <div class="hero-slider" *ngIf="cafeImages.length">
+      <div class="back-arrow" (click)="goBack()">←</div>
+
+      <img
+        loading="lazy"
+        [src]="'http://localhost:8080/uploads/' + cafeImages[0]"
+        class="hero-img">
+    </div>
+    <div class="details-layout">
+      <!-- GLASS CARD -->
+      <div class="glass-card">
+      <!-- COLUMN 1 : ABOUT -->
+      <div class="about-col">
+
+        <h1>{{ cafe?.name }}</h1>
+        <p class="tagline">{{ cafe?.tagline }}</p>
+        <p>{{ cafe?.streetName }}, {{ cafe?.state }}</p>
+
+        <h3>About this cafe</h3>
+        <p>{{ cafe?.description }}</p>
+
+      </div>
+
+
+      <!-- COLUMN 2 : CONTACT -->
+      <div class="contact-col">
+
+        <h3>Contact Info</h3>
+
+        <div class="info-item">📞 {{ cafe?.phone }}</div>
+        <div class="info-item">📧 {{ cafe?.email }}</div>
+        <div class="info-item">🕒 {{ cafe?.openTime }} AM</div>
+        <div class="info-item">🕘 {{ cafe?.closeTime }} PM</div>
+        <div class="info-item">📍 {{ cafe?.streetName }}, {{ cafe?.state }}</div>
+        <div class="info-item">🧭 {{ cafe?.landmark }}</div>
+
+      </div>
+</div>
+
+      <div class="reservation-card">
+
+        <h2>Make a Reservation</h2>
+
+        <div class="reservation-grid">
+
+          <!-- DATE -->
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="selectedDate" [min]="minDate" (change)="onDateChange()">
+          </div>
+
+          <!-- TIME -->
+          <div class="form-group">
+            <label>Time</label>
+            <select [(ngModel)]="selectedTime">
+              <option value="" disabled selected>Select Time</option>
+              <option *ngFor="let time of availableTimeSlots">{{time}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Total Guests</label>
+
+            <input type="number"
+                   [(ngModel)]="guestCount"
+                   (input)="sortTablesByGuestSize()">
+
+          </div>
+          <!-- TABLE -->
+          <div class="form-group">
+            <label>Table</label>
+            <select [(ngModel)]="selectedTableId">
+
+              <option value="">Select Table</option>
+
+              <option *ngFor="let t of tables"
+                      [value]="t.id">
+
+                {{t.tableName}} ({{t.seats}} seats)
+
+              </option>
+
+            </select>
+          </div>
+
+          <!-- TOTAL GUESTS -->
+
+
+        </div>
+
+        <!-- BOOK BUTTON -->
+        <button
+          class="book-btn"
+          [disabled]="!selectedDate || !selectedTime || !selectedTableId"
+          (click)="confirmBooking()">
+
+          Book Table
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ================= MENU PREVIEW (8 ITEMS) ================= -->
+    <div class="menu-wrapper">
+
+      <h2>Popular Menu</h2>
+
+      <div class="menu-grid">
+
+        <div class="menu-card"
+             *ngFor="let item of previewMenu">
+
+          <img
+            loading="lazy"
+            *ngIf="item.images?.length"
+            [src]="'http://localhost:8080/uploads/' + item.images[0]">
+          <h3>{{item.name}}</h3>
+          <p>₹{{item.price}}</p>
+
+        </div>
+
+      </div>
+
+      <!-- VIEW MORE -->
+      <div class="view-more" *ngIf="menu.length > 8">
+        <button (click)="openMenuPage()">View More</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- ================= MENU PAGE (POS STYLE) ============== -->
+  <!-- ===================================================== -->
+
+  <div *ngIf="currentView === 'menu'" class="menu-page">
+
+    <!-- ================= TOP BAR ================= -->
+
+
+    <div class="category-row">
+
+      <!-- SEARCH + FILTER -->
+      <div class="search-filter-wrapper">
+
+        <div class="search-box">
+          <i class="icon"></i>
+          <input
+            type="text"
+            placeholder="Search food..."
+            [(ngModel)]="searchText">
+        </div>
+
+
+
+      </div>
+
+      <!-- CATEGORY ICONS -->
+      <div class="category-card"
+           *ngFor="let cat of categories"
+           [class.active]="selectedCategory === cat.name"
+           (click)="selectedCategory = cat.name">
+        <div class="category-icon" [innerHTML]="cat.icon"></div>
+
+        <span>{{cat.label}}</span>
+
+      </div>
+
+    </div>
+
+    <!-- ================= MENU + CART LAYOUT ================= -->
+    <div class="pos-layout">
+
+      <!-- LEFT SIDE MENU -->
+      <div class="pos-menu">
+
+        <div class="menu-card"
+             *ngFor="let item of filteredMenu; trackBy: trackById">
+          <img loading="lazy"
+               *ngIf="item.images?.length"
+               [src]="'http://localhost:8080/uploads/' + item.images[0]">
+
+          <h4>{{item.name}}</h4>
+          <p>₹{{item.price}}</p>
+
+          <button (click)="addToCart(item)">Add</button>
+
+        </div>
+        </div>
+
+
+
+      <!-- ORDER DETAILS PANEL -->
+      <!-- ORDER DETAILS PANEL -->
+      <div class="order-details-card">
+        <h3><i class="fa fa-receipt"></i> Order Details</h3>
+
+        <!-- ✅ CART ITEMS LIST -->
+        <div class="cart-empty" *ngIf="cart.length === 0">
+          <i class="fa fa-shopping-cart"></i>
+          <p>No items added yet</p>
+        </div>
+
+        <div class="cart-items" *ngIf="cart.length > 0">
+          <div class="cart-item" *ngFor="let item of cart">
+
+            <div class="cart-item-info">
+              <span class="cart-item-name">{{ item.name }}</span>
+              <span class="cart-item-price">₹{{ item.price }}</span>
+            </div>
+
+            <div class="cart-item-qty">
+              <button class="qty-btn" (click)="decreaseQty(item)">−</button>
+              <span>{{ item.qty }}</span>
+              <button class="qty-btn" (click)="increaseQty(item)">+</button>
+            </div>
+
+            <span class="cart-item-total">₹{{ item.price * item.qty }}</span>
+
+          </div>
+        </div>
+
+        <hr class="dashed-hr" *ngIf="cart.length > 0">
+
+        <div class="order-summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ subtotal }}</span>
+        </div>
+        <div class="order-summary-row">
+          <span>Tax (5%)</span>
+          <span>₹{{ tax | number:'1.2-2' }}</span>
+        </div>
+        <hr class="dashed-hr">
+        <div class="order-summary-row total-row">
+          <span>Total</span>
+          <span>₹{{ total | number:'1.2-2' }}</span>
+        </div>
+
+        <!-- COUPON -->
+        <input class="coupon-input" type="text"
+               placeholder="Have a coupon code?"
+               [(ngModel)]="couponCode">
+
+        <!-- PAYMENT MODE -->
+        <div class="payment-mode-wrap">
+          <label class="payment-mode-label">Payment Mode</label>
+          <div class="payment-mode-toggle">
+            <button class="mode-btn"
+                    [class.active]="paymentMode === 'CASH'"
+                    (click)="paymentMode = 'CASH'">
+              <i class="fa fa-money-bill-wave"></i> Cash
+            </button>
+            <button class="mode-btn"
+                    [class.active]="paymentMode === 'ONLINE'"
+                    (click)="paymentMode = 'ONLINE'">
+              <i class="fa fa-credit-card"></i> Online
+            </button>
+          </div>
+        </div>
+
+        <div class="online-info" *ngIf="paymentMode === 'ONLINE'">
+          <i class="fa fa-info-circle"></i>
+          A Payment ID will be generated after successful transaction.
+        </div>
+        <div class="cash-info" *ngIf="paymentMode === 'CASH'">
+          <i class="fa fa-check-circle"></i>
+          Pay at the counter. Order will be placed immediately.
+        </div>
+
+        <button class="place-order-btn"
+                (click)="placeOrder()"
+                [disabled]="cart.length === 0">
+          <i class="fa fa-shopping-bag"></i>
+          {{ paymentMode === 'CASH' ? 'Place Order' : 'Pay & Place Order' }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= PAYMENT POPUP ================= -->
+
+
+  <!-- SUCCESS POPUP (UNCHANGED) -->
+
+
+</div>
+

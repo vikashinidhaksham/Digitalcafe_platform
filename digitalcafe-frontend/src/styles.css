@@ -1,0 +1,426 @@
+/* You can add global styles to this file, and also import other style files */
+/* ================= GLOBAL ================= */
+
+:root{
+  --bg-main:#f6efe6;
+  --sidebar-bg:#f1e6d8;
+  --card-bg:#ffffff;
+  --primary:#c58b4e;
+  --primary-dark:#a87032;
+  --text-dark:#2e2e2e;
+  --text-light:#777;
+  --shadow:0 15px 35px rgba(0,0,0,0.05);
+}
+
+body{
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  background:var(--bg-main);
+  background-image: radial-gradient(#e8dccb 1px, transparent 1px);
+  background-size:18px 18px;
+}
+
+/* ================= LAYOUT ================= */
+
+.layout{
+  display:flex;
+}
+
+.content{
+  flex:1;
+  padding:40px;
+}
+
+/* ================= SIDEBAR ================= */
+
+/* ================= SIDEBAR FIXED ================= */
+
+.layout{
+  display:flex;
+}
+
+/* FIXED SIDEBAR */
+.sidebar{
+  width:260px;
+  background:linear-gradient(180deg,#f3e6d6,#ead8c2);
+  padding:35px 25px;
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  box-shadow: 5px 0 30px rgba(0,0,0,0.05);
+  border-right:1px solid #e4d3bf;
+}
+
+/* CONTENT SHIFT RIGHT */
+.content{
+  margin-left:260px;
+  padding:50px;
+  flex:1;
+  background:#f9f4ee;
+  min-height:100vh;
+}
+.cafeTop{
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:40px;
+  color:#a87032;
+}
+
+.sideItem{
+  width:100%;
+  background:transparent;
+  border:none;
+  padding:14px 18px;
+  text-align:left;
+  font-size:15px;
+  border-radius:14px;
+  margin-bottom:12px;
+  color:#4a3f35;
+  transition:0.3s;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:500;
+}
+
+.sideItem:hover{
+  background:#c58b4e;
+  color:white;
+  transform:translateX(4px);
+}
+
+.logoutBtn{
+  margin-top:25px;
+  background:#f4d8d8;
+  color:#b02a2a;
+  font-weight:600;
+}
+
+.logoutBtn:hover{
+  background:#e7bcbc;
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashRow{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:40px;
+  margin-top:30px;
+}
+
+.dashCards{
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:25px;
+}
+
+.statCard{
+  background:var(--card-bg);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  transition:0.3s;
+}
+
+.statCard:hover{
+  transform:translateY(-5px);
+}
+
+.statCard h3{
+  font-size:30px;
+  margin:0;
+  color:var(--primary);
+}
+
+.statCard p{
+  margin-top:8px;
+  color:var(--text-light);
+  font-size:14px;
+}
+
+/* ================= CHEF SPECIAL ================= */
+
+.specialCard{
+  background:var(--card-bg);
+  border-radius:25px;
+  padding:35px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.specialCard img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:15px;
+  margin:20px 0;
+}
+
+.specialCard h2{
+  margin:0;
+}
+
+.specialCard h3{
+  margin:10px 0;
+}
+
+.price{
+  font-size:18px;
+  font-weight:600;
+  color:var(--primary);
+}
+
+/* ================= TABLE DESIGN ================= */
+
+.tableCard{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+
+.modernTable{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.modernTable th{
+  text-align:left;
+  padding:12px;
+  font-size:13px;
+  color:var(--text-light);
+}
+
+.modernTable td{
+  padding:15px 12px;
+  border-top:1px solid #f2f2f2;
+  font-size:14px;
+}
+
+.modernTable tr:hover{
+  background:#faf7f3;
+}
+
+/* ================= STATUS BADGE ================= */
+
+.statusBadge{
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:500;
+}
+
+.statusBadge.available{
+  background:#e7f9f0;
+  color:#22c55e;
+}
+
+.statusBadge.booked{
+  background:#fdecea;
+  color:#e74c3c;
+}
+
+/* ================= BUTTONS ================= */
+
+.addBtn,
+.saveBtn{
+  background:var(--primary);
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  color:white;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.addBtn:hover,
+.saveBtn:hover{
+  background:var(--primary-dark);
+}
+
+.cancelBtn{
+  background:#eee;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+}
+
+/* ================= CAROUSEL ================= */
+
+.carouselWrapper{
+  overflow:hidden;
+  border-radius:25px;
+  box-shadow:var(--shadow);
+}
+
+.carouselTrack img{
+  width:100%;
+  height:300px;
+  object-fit:cover;
+}
+
+.thumbnailContainer{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.thumbnailContainer img{
+  width:80px;
+  height:60px;
+  border-radius:10px;
+  cursor:pointer;
+  opacity:0.6;
+}
+
+.thumbnailContainer img.activeThumb{
+  opacity:1;
+  border:2px solid var(--primary);
+}
+
+/* ================= CAFE DETAILS ================= */
+
+.cafeDetailsCard{
+  margin-top:30px;
+  background:white;
+  padding:35px;
+  border-radius:25px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
+
+.editCafeBtn,
+.deleteCafeBtn{
+  position:absolute;
+  top:20px;
+  background:#fafafa;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.editCafeBtn{ right:60px; }
+.deleteCafeBtn{ right:20px; }
+/* ===== ANALYTICS SECTION ===== */
+
+.analyticsSection {
+  display: flex;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.modernCard {
+  flex: 1;
+  background: #fff;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+/* Top Header */
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.seeMore {
+  font-size: 13px;
+  color: #ff4d4d;
+  cursor: pointer;
+}
+
+/* Chart */
+
+.chartWrapper {
+  position: relative;
+  width: 260px;
+  height: 260px;   /* IMPORTANT */
+  margin: auto;
+}
+
+.chartWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chartCenter {
+  position: absolute;
+  inset: 0;                 /* 🔥 THIS FIXES CENTERING */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.chartCenter h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.chartCenter p {
+  margin: 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* Rating */
+
+.ratingMain {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ratingMain h1 {
+  font-size: 42px;
+  margin: 0;
+}
+
+.ratingMain span {
+  font-size: 18px;
+  color: #777;
+}
+
+.stars {
+  color: #ff9800;
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.completedText {
+  font-size: 13px;
+  color: #888;
+}
+
+/* Review list */
+
+.reviewList {
+  margin-top: 10px;
+}
+
+.reviewRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reviewRow img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.smallStars {
+  font-size: 13px;
+  color: #ff9800;
+}

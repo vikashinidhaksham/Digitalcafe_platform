@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Ordering Cafe</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top navigation */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        .top-bar a {
+            text-decoration: none;
+            margin-left: 15px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: white;
+            color: #ff5e62;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .top-bar a:hover {
+            background-color: #ff5e62;
+            color: white;
+        }
+
+        /* Center content */
+        .center-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .center-content h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .center-content p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Top Buttons -->
+<div class="top-bar">
+    <a href="/register">Register</a>
+    <a href="/login">Login</a>
+</div>
+
+<!-- Center Title -->
+<div class="center-content">
+    <h1>Welcome to Digital Ordering Cafe</h1>
+    <p>Fast • Easy • Smart Ordering Experience</p>
+</div>
+
+</body>
+</html>

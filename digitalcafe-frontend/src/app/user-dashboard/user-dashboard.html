@@ -1,0 +1,1321 @@
+<!-- NAVBAR -->
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="logo-container">
+      <div class="logo-icon">
+        <i class="fa fa-utensils"></i>
+      </div>
+
+      <div class="logo-text">
+        Savour
+        <span class="logo-sub">Taste the Moment</span>
+      </div>
+    </div>
+
+    <ul class="menu">
+
+      <li (click)="tab='profile'">
+        <i class="fa fa-user"></i> Profile
+      </li>
+
+      <li (click)="tab='dashboard'">
+        <i class="fa fa-chart-bar"></i> Dashboard
+      </li>
+
+      <li (click)="tab='cafe'">
+        <i class="fa fa-coffee"></i> Cafe
+      </li>
+
+      <li (click)="tab='orders'">
+        <i class="fa fa-shopping-cart"></i> My Orders
+      </li>
+
+      <li (click)="tab='reservations'">
+        <i class="fa fa-calendar"></i> My Reservations
+      </li>
+
+      <li (click)="tab='payments'">
+        <i class="fa fa-credit-card"></i> My Payments
+      </li>
+
+      <li (click)="logout()">
+        <i class="fa fa-sign-out"></i> Logout
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- ════ TOP NOTIFICATION BAR ════ -->
+    <div class="top-bar">
+  <span class="top-bar-greeting">
+    Welcome, <span>{{ profile?.firstName }}</span>
+  </span>
+
+      <!-- Bell button -->
+      <button class="notif-btn" (click)="toggleNotifDropdown()">
+        <i class="fa fa-bell"></i>
+        <span class="notif-badge-dot" *ngIf="unreadCount > 0">
+      {{ unreadCount }}
+    </span>
+      </button>
+
+      <!-- Dropdown -->
+      <div class="notif-dropdown" *ngIf="showNotifDropdown" (clickOutside)="closeNotifOnOutsideClick()">
+
+        <div class="notif-drop-header">
+          <h4>Notifications</h4>
+          <button class="notif-mark-all" (click)="markAllRead()">
+            Mark all read
+          </button>
+        </div>
+
+        <!-- Today's reservation alerts -->
+        <div *ngFor="let n of notifications"
+             class="notif-item"
+             [class.unread]="!n.read"
+             (click)="readNotif(n); tab='reservations'; showNotifDropdown=false">
+
+          <div class="notif-icon-pill">{{ n.icon }}</div>
+
+          <div class="notif-text-wrap">
+            <div class="notif-title">{{ n.title }}</div>
+            <div class="notif-body">{{ n.body }}</div>
+            <div class="notif-time" *ngIf="n.time">{{ n.time }}</div>
+          </div>
+
+          <div class="notif-unread-dot" [class.read]="n.read"></div>
+
+        </div>
+
+        <!-- Empty state -->
+        <div class="notif-empty" *ngIf="notifications.length === 0">
+          <i class="fa fa-check-circle" style="color:#10b981;font-size:20px"></i><br>
+          All caught up! No new alerts.
+        </div>
+
+      </div>
+    </div>
+<!-- DEBUG COUNT -->
+<!-- ================= FILTER BAR ================= -->
+    <div *ngIf="tab==='cafe'">
+<div class="filterBar">
+
+  <!-- Search -->
+  <div class="searchBox">
+    <i class="fa fa-search"></i>
+    <input
+      type="text"
+      placeholder="Search cafes..."
+      [(ngModel)]="searchText"
+      (input)="applyFilters()"
+    >
+  </div>
+
+  <!-- Sort -->
+  <select class="filterSelect" (change)="sortAlphabetically($event)">
+    <option value="">Sort</option>
+    <option value="az">A → Z</option>
+    <option value="za">Z → A</option>
+  </select>
+
+  <!-- Rating -->
+  <select class="filterSelect" (change)="filterRating($event)">
+    <option value="">Rating</option>
+    <option value="4">4★ & above</option>
+    <option value="3">3★ & above</option>
+    <option value="2">2★ & above</option>
+  </select>
+
+  <!-- Veg -->
+  <button
+    class="vegBtn"
+    [class.active]="vegFilter"
+    (click)="toggleVeg()"
+  >
+    <span class="vegIcon"></span>
+    Veg
+  </button>
+
+  <!-- Non Veg -->
+  <button
+    class="nonVegBtn"
+    [class.active]="nonVegFilter"
+    (click)="toggleNonVeg()"
+  >
+    <span class="nonVegIcon"></span>
+    Non-Veg
+  </button>
+
+</div>
+
+<!-- CAFE GRID -->
+<div class="cafe-container">
+
+  <div *ngFor="let cafe of paginatedCafes" class="cafe-card"(click)="openCafe(cafe.id)" >
+
+    <!-- Show first image from photos array -->
+    <img *ngIf="cafe.photos && cafe.photos.length > 0"
+         [src]="'http://localhost:8080/uploads/' + cafe.photos[0]"
+         alt="Cafe Image"
+         width="200">
+
+
+
+    <div class="cafe-info">
+      <h3>{{ cafe.name }}</h3>
+      <p>{{ cafe.tagline }}</p>
+      <p>{{ cafe.streetName }}, {{ cafe.state }}</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PAGINATION -->
+
+<div class="pagination">
+
+  <button
+    (click)="prevPage()"
+    [disabled]="cafePageNumber===1"
+  >
+    ‹
+  </button>
+
+  <span
+    *ngFor="let page of pages"
+    (click)="goToPage(page)"
+    [class.active]="cafePageNumber===page"
+  >
+{{page}}
+</span>
+
+  <button
+    (click)="nextPage()"
+    [disabled]="cafePageNumber===cafeTotalPages"
+  >
+    ›
+  </button>
+
+</div>
+</div>
+    <div *ngIf="tab==='dashboard'" class="dashboard">
+
+      <div class="stats">
+
+        <!-- TOTAL ORDERS -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Total Orders</h4>
+            <i class="fa fa-shopping-bag stat-icon orders"></i>
+          </div>
+          <h2>{{totalOrders}}</h2>
+        </div>
+
+        <!-- TOTAL AMOUNT -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Total Amount</h4>
+            <i class="fa fa-rupee-sign stat-icon amount"></i>
+          </div>
+          <h2>₹{{totalAmount}}</h2>
+        </div>
+
+        <!-- RESERVATIONS -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Reservations</h4>
+            <i class="fa fa-calendar-check stat-icon reservation"></i>
+          </div>
+          <h2>{{reservationsCount}}</h2>
+        </div>
+
+        <!-- ⭐ 4TH CARD -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Today's Orders</h4>
+            <i class="fa fa-clock stat-icon today"></i>
+          </div>
+          <h2>{{todayOrders.length}}</h2>
+        </div>
+
+      </div>
+
+      <div class="grid">
+
+        <!-- CALENDAR -->
+        <div class="calendar-card">
+
+          <div class="calendar-header">
+            <button (click)="prevMonth()">❮</button>
+
+            <span>
+      {{ monthNames[currentMonth] }} {{ currentYear }}
+    </span>
+
+            <button (click)="nextMonth()">❯</button>
+          </div>
+
+          <!-- Day Names -->
+          <div class="calendar-days">
+            <div *ngFor="let d of days" class="day-name">
+              {{ d }}
+            </div>
+          </div>
+
+          <!-- Calendar Dates -->
+          <div class="calendar-grid">
+
+            <div
+              *ngFor="let d of calendarDates"
+              class="date"
+              [ngClass]="getDateClass(d)"
+            >
+              {{ d.day }}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- CHART -->
+        <div class="chart-card">
+
+          <h3>Payment Performance</h3>
+
+          <div class="revenue-label">
+            Total Revenue: <span id="totalRevenue">₹0</span>
+          </div>
+
+          <canvas id="chart"></canvas>
+
+        </div>
+
+        <!-- ACTIVITIES NOTIFICATION -->
+        <div class="activity-card">
+
+          <h3>Activities Notification</h3>
+
+          <div *ngFor="let r of dashboardReservations"
+               class="reservation-card"
+               [ngClass]="getReservationStatus(r)">
+
+            <div class="row1">
+
+              <div>
+                <b>Booking ID :</b> {{r.bookingId}}
+              </div>
+
+              <div class="customer">
+                <b>Customer Name :</b> {{r.lastName}}
+              </div>
+
+            </div>
+
+            <div class="row2">
+
+              <span><b>Table No :</b> {{r.tableId}}</span>
+
+
+
+              <span><b>Date :</b> {{r.bookingDate}}</span>
+
+              <span><b>Time :</b> {{r.bookingTime}}</span>
+
+            </div>
+
+          </div>
+
+          <div class="view-all" (click)="tab='reservations'">
+            View All →
+          </div>
+
+        </div>
+
+
+        <!-- TOP FOOD ITEMS -->
+        <div class="top-card">
+
+        <h3>Top Food Items</h3>
+          <div *ngFor="let food of topFoods" class="top-food-row">
+
+            <img
+              [src]="'http://localhost:8080/uploads/' + food.image"
+              class="food-img"
+            />
+
+            <div class="food-details">
+
+              <div class="food-header">
+                <span class="food-name">{{food.name}}</span>
+                <span class="food-count">{{food.total}}</span>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  [style.width.%]="(food.total / topFoods[0]?.total) * 100">
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+      </div>
+
+
+      </div>
+
+    </div>
+    <!-- REPLACE THE ENTIRE <div *ngIf="tab==='orders'"> BLOCK WITH THIS -->
+
+    <div *ngIf="tab==='orders'" class="orders">
+
+      <h2>My Orders</h2>
+
+      <!-- TOP SUMMARY CARDS -->
+      <div class="today-orders">
+
+        <div class="today-card total-card">
+          <i class="fa fa-shopping-bag card-icon"></i>
+          <div class="card-title">Total Orders</div><!-- TO THIS -->
+          <div class="card-value">{{ orders.length }}</div>
+        </div>
+
+        <div class="today-card order-card-small"
+             *ngFor="let o of todayOrders">
+          <i class="fa fa-receipt card-icon"></i>
+          <div class="card-title">Order ID</div>
+          <div class="card-value">{{ o.orderId }}</div>
+          <span class="status-badge" [ngClass]="o.chefStatus">
+        {{ o.chefStatus }}
+      </span>
+        </div>
+
+      </div>
+
+      <h3 class="order-list-title">Order List</h3>
+
+      <!-- CONTROLS ROW -->
+      <div class="order-controls">
+
+        <div class="filter-dropdown">
+          <button class="filter-btn" (click)="toggleFilterMenu()">
+            <i class="fa fa-filter"></i>
+          </button>
+          <div class="filter-menu" *ngIf="showFilterMenu">
+            <div (click)="setSort('recent')"><i class="fa fa-arrow-down"></i> Recent</div>
+            <div (click)="setSort('old')"><i class="fa fa-arrow-up"></i> Old</div>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <i class="fa fa-search"></i>
+          <input type="text"
+                 placeholder="Search order, cafe, item..."
+                 [(ngModel)]="orderSearch"
+                 (input)="applyOrderFilters()">
+        </div>
+
+        <div class="date-filter">
+          <input type="date"
+                 [(ngModel)]="orderDate"
+                 (change)="applyOrderFilters()">
+        </div>
+
+      </div>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- ORDER CARDS                                 -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="order-card"
+           *ngFor="let o of paginatedOrders"
+           [class.highlight]="o.orderId == highlightOrderId"
+           [class.order-cancelled]="o.orderStatus === 'CANCELLED'">
+
+        <!-- ── HEADER (click to expand) ── -->
+        <div class="order-top" (click)="toggleOrder(o)">
+
+          <div class="order-id">
+            Order #{{ o.orderId }}
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:center">
+
+            <!-- Status badge in header -->
+            <span class="order-status-chip"
+                  [class.chip-pending]="o.orderStatus !== 'CANCELLED' && o.chefStatus === 'PENDING'"
+                  [class.chip-preparing]="o.chefStatus === 'PREPARING'"
+                  [class.chip-ready]="o.chefStatus === 'READY'"
+                  [class.chip-served]="o.waiterStatus === 'SERVED'"
+                  [class.chip-cancelled]="o.orderStatus === 'CANCELLED'">
+          {{ o.orderStatus === 'CANCELLED' ? 'CANCELLED' :
+             (o.waiterStatus === 'SERVED' ? 'SERVED' : o.chefStatus || 'PENDING') }}
+        </span>
+
+            <i class="fa" [class.fa-chevron-down]="!o.open" [class.fa-chevron-up]="o.open"></i>
+          </div>
+
+        </div>
+
+        <!-- ── EXPANDED BODY ── -->
+        <div *ngIf="o.open" class="order-body">
+
+          <!-- Cafe name + action buttons row -->
+          <div class="row cafe-row">
+
+            <div class="cafe-name">{{ o.cafeName }}</div>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+
+              <!-- Receipt — ONLINE/RAZORPAY only -->
+              <button class="download-btn"
+                      *ngIf="isOnlinePayment(o) && o.orderStatus !== 'CANCELLED'"
+                      (click)="downloadReceipt(o)">
+                <i class="fa fa-download"></i> Receipt
+              </button>
+
+              <!-- Cancel — within 6hrs and not already cancelled/served -->
+              <button class="cancel-order-btn"
+                      *ngIf="o.orderStatus !== 'CANCELLED' && canCancelOrder(o)"
+                      (click)="cancelOrder(o)">
+                <i class="fa fa-times-circle"></i> Cancel Order
+              </button>
+
+              <!-- Cannot cancel badge -->
+              <span class="no-cancel-badge"
+                    *ngIf="o.orderStatus !== 'CANCELLED'
+                       && !canCancelOrder(o)
+                       && o.waiterStatus !== 'SERVED'
+                       && o.chefStatus !== 'COMPLETED'">
+            <i class="fa fa-lock"></i> Cannot Cancel (6hr passed)
+          </span>
+
+              <!-- Order Again — always show for CANCELLED; also show for completed -->
+              <button class="order-again-btn"
+                      *ngIf="o.orderStatus === 'CANCELLED' || o.waiterStatus === 'SERVED'"
+                      (click)="orderAgain(o)">
+                <i class="fa fa-redo"></i> Order Again
+              </button>
+
+            </div>
+          </div>
+
+          <!-- Table + Customer info -->
+          <div class="row">
+            <div><b>Table No:</b> {{ o.tableNo || 'N/A' }}</div>
+            <div><b>Table Name:</b> {{ o.tableName || 'Not Assigned' }}</div>
+            <div><b>Customer:</b> {{ profile.firstName }} {{ profile.lastName }}</div>
+          </div>
+
+          <!-- IDs + Date + Time -->
+          <div class="row">
+            <div>
+              <b>Payment Method:</b>
+              <span class="method-badge-order"
+                    [style.background]="isOnlinePayment(o) ? '#eff6ff' : '#ecfdf5'"
+                    [style.color]="isOnlinePayment(o) ? '#1d4ed8' : '#059669'"
+                    [style.border]="isOnlinePayment(o) ? '1px solid rgba(59,130,246,0.3)' : '1px solid rgba(16,185,129,0.3)'">
+            <i [class]="isOnlinePayment(o) ? 'fa fa-credit-card' : 'fa fa-money-bill-wave'"></i>
+            {{ isOnlinePayment(o) ? 'ONLINE' : 'CASH' }}
+          </span>
+            </div>
+            <div><b>Payment ID:</b> {{ isOnlinePayment(o) ? (o.paymentId || 'N/A') : 'N/A' }}</div>
+            <div><b>Booking ID:</b> {{ o.bookingId || 'N/A' }}</div>
+            <div><b>Date:</b> {{ o.bookingDate }}</div>
+            <div><b>Time:</b> {{ o.bookingTime || 'N/A' }}</div>
+          </div>
+
+          <hr>
+
+          <!-- CANCELLED BANNER -->
+          <div class="cancelled-banner" *ngIf="o.orderStatus === 'CANCELLED'">
+            <i class="fa fa-times-circle"></i>
+            This order has been cancelled.
+            <button class="order-again-inline-btn" (click)="orderAgain(o)">
+              <i class="fa fa-redo"></i> Order Again
+            </button>
+          </div>
+
+          <!-- PROGRESS TRACKER — hide if cancelled -->
+          <div class="timeline" *ngIf="o.orderStatus !== 'CANCELLED'">
+            <div class="timeline-step" [class.active]="getOrderStep(o) >= 1">
+              <div class="circle"></div>
+              <div class="step-label">Pending</div>
+            </div>
+            <div class="timeline-line" [class.active]="getOrderStep(o) > 1"></div>
+            <div class="timeline-step" [class.active]="getOrderStep(o) >= 2">
+              <div class="circle"></div>
+              <div class="step-label">Preparing</div>
+            </div>
+            <div class="timeline-line" [class.active]="getOrderStep(o) > 2"></div>
+            <div class="timeline-step" [class.active]="getOrderStep(o) >= 3">
+              <div class="circle"></div>
+              <div class="step-label">Ready</div>
+            </div>
+            <div class="timeline-line" [class.active]="getOrderStep(o) > 3"></div>
+            <div class="timeline-step" [class.active]="getOrderStep(o) >= 4">
+              <div class="circle"></div>
+              <div class="step-label">Served</div>
+            </div>
+          </div>
+
+          <!-- ORDER SUMMARY -->
+          <div class="order-summary">
+
+            <h3>Order Summary</h3>
+
+            <div *ngFor="let item of o.items" class="item-row">
+              <span>{{ item.menuName }} x{{ item.qty }}</span>
+              <span>₹{{ item.price * item.qty }}</span>
+            </div>
+
+            <hr style="border:none; border-top:1px dashed #e4e8ed; margin:10px 0">
+
+            <div class="item-row" style="color:#94a3b8; font-size:13px">
+              <span>Subtotal</span>
+              <span>₹{{ getOrderSubtotal(o) | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="item-row" style="color:#94a3b8; font-size:13px">
+              <span>Tax (5%)</span>
+              <span>₹{{ getOrderTax(o) | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="total-row">
+              <b>Total</b>
+              <b>₹{{ o.totalAmount | number:'1.2-2' }}</b>
+            </div>
+
+            <!-- Payment method badge -->
+            <div style="margin-top:10px; padding-top:10px;
+             border-top:1px solid #f0f2f5;
+             display:flex; align-items:center;
+             justify-content:space-between">
+              <span style="font-size:12px; color:#94a3b8">Payment Method</span>
+              <span class="method-badge-order"
+                    [style.background]="isOnlinePayment(o) ? '#eff6ff' : '#ecfdf5'"
+                    [style.color]="isOnlinePayment(o) ? '#1d4ed8' : '#059669'"
+                    [style.border]="isOnlinePayment(o) ? '1px solid rgba(59,130,246,0.3)' : '1px solid rgba(16,185,129,0.3)'">
+            <i [class]="isOnlinePayment(o) ? 'fa fa-credit-card' : 'fa fa-money-bill-wave'"></i>
+            {{ isOnlinePayment(o) ? 'ONLINE' : 'CASH' }}
+          </span>
+            </div>
+
+          </div>
+
+          <!-- ══════════════════════════════════ -->
+          <!-- RECEIPT — hidden div for PDF       -->
+          <!-- Only rendered for online payments  -->
+          <!-- ══════════════════════════════════ -->
+          <div [id]="'receipt-' + o.orderId"
+               class="receipt-container"
+               *ngIf="isOnlinePayment(o)"
+               style="display:none">
+
+            <div class="receipt-header">
+              <div class="header-left">
+                <div class="logo-box">S</div>
+                <div class="brand-text">
+                  <h1>Savour Cafe</h1>
+                  <p>Premium Coffee Experience</p>
+                </div>
+              </div>
+              <div class="receipt-title">RECEIPT</div>
+            </div>
+
+            <div class="receipt-details">
+              <div class="left">
+                <p><b>Cafe:</b> {{ o.cafeName }}</p>
+                <p><b>Customer:</b> {{ profile.firstName }} {{ profile.lastName }}</p>
+                <p><b>Table No:</b> {{ o.tableNo || 'N/A' }}</p>
+                <p><b>Table Name:</b> {{ o.tableName || 'N/A' }}</p>
+                <p><b>Payment Mode:</b> {{ o.paymentMethod }}</p>
+              </div>
+              <div class="right">
+                <p><b>Order ID:</b> {{ o.orderId }}</p>
+                <p><b>Payment ID:</b> {{ o.paymentId }}</p>
+                <p><b>Booking ID:</b> {{ o.bookingId }}</p>
+                <p><b>Date:</b> {{ o.bookingDate }}</p>
+                <p><b>Time:</b> {{ o.bookingTime }}</p>
+              </div>
+            </div>
+
+            <table class="receipt-table">
+              <thead>
+              <tr>
+                <th>S.No</th><th>Item</th>
+                <th>Price</th><th>Qty</th><th>Total</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of o.items; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.menuName }}</td>
+                <td>₹{{ item.price }}</td>
+                <td>{{ item.qty }}</td>
+                <td>₹{{ item.price * item.qty }}</td>
+              </tr>
+              </tbody>
+            </table>
+
+            <div class="receipt-total">
+              <div class="subtotal">Subtotal</div>
+              <div class="subtotal-value">₹{{ getOrderSubtotal(o) | number:'1.2-2' }}</div>
+              <div class="subtotal">Tax (5%)</div>
+              <div class="subtotal-value">₹{{ getOrderTax(o) | number:'1.2-2' }}</div>
+              <div class="grand-total">Total ₹{{ o.totalAmount | number:'1.2-2' }}</div>
+            </div>
+
+            <div class="receipt-footer">
+              <p>Thank you for visiting</p>
+              <h3>SAVOUR</h3>
+            </div>
+
+          </div>
+          <!-- end receipt -->
+
+        </div>
+        <!-- end order-body -->
+
+      </div>
+      <!-- end *ngFor order-card -->
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <button (click)="prevOrderPage()" [disabled]="orderPageNumber === 1">‹</button>
+        <span *ngFor="let page of orderPages"
+              (click)="goToOrderPage(page)"
+              [class.active]="orderPageNumber === page">
+      {{ page }}
+    </span>
+        <button (click)="nextOrderPage()" [disabled]="orderPageNumber === orderTotalPages">›</button>
+      </div>
+
+    </div>
+    <!-- end tab=orders -->
+    <div *ngIf="tab==='reservations'" class="reservations">
+
+      <!-- ✅ ROW 1: TITLE -->
+      <h2 class="page-title">Reservations</h2>
+
+
+      <!-- ✅ ROW 2: CARDS -->
+      <div class="reservation-stats">
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Completed</h4>
+            <i class="fa fa-check-circle stat-icon completed"></i>
+          </div>
+          <h2>{{completedCount}}</h2>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Today</h4>
+            <i class="fa fa-calendar-day stat-icon today"></i>
+          </div>
+          <h2>{{todayCount}}</h2>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <h4>Upcoming</h4>
+            <i class="fa fa-clock stat-icon upcoming"></i>
+          </div>
+          <h2>{{upcomingCount}}</h2>
+        </div>
+
+      </div>
+
+
+      <!-- ✅ ROW 3: LIST + FILTER -->
+      <div class="reservation-controls-row">
+
+        <h3 class="list-title">Reservation List</h3>
+
+        <div class="reservation-controls">
+
+          <!-- FILTER -->
+          <div class="filter-dropdown">
+
+            <button class="filter-btn" (click)="toggleReservationFilter()">
+              <i class="fa fa-filter"></i>
+            </button>
+
+            <div class="filter-menu" *ngIf="showReservationFilter">
+
+              <div (click)="filterReservations('all')">All</div>
+              <div (click)="filterReservations('today')">Today</div>
+              <div (click)="filterReservations('upcoming')">Upcoming</div>
+              <div (click)="filterReservations('completed')">Completed</div>
+
+            </div>
+
+          </div>
+
+          <!-- DATE -->
+          <div class="date-filter">
+            <input type="date"
+                   [(ngModel)]="reservationDate"
+                   (change)="filterReservationsByDate()">
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ✅ ROW 4: RESERVATION LIST -->
+      <div *ngFor="let r of paginatedReservations"
+           class="reservation-card"
+           [ngClass]="getReservationStatus(r)">
+
+        <div class="row1">
+
+          <div>
+            <b>Booking ID :</b> {{r.bookingId}}
+          </div>
+
+          <div class="customer">
+            <b>Customer Name :</b> {{r.lastName}}
+          </div>
+
+        </div>
+
+        <div class="row2">
+
+          <span><b>Table No :</b> {{r.tableNo}}</span>
+          <span><b>Table Name :</b> {{r.tableName}}</span>
+          <span><b>Date :</b> {{r.bookingDate}}</span>
+          <span><b>Time :</b> {{r.bookingTime}}</span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PAGINATION -->
+
+      <div class="pagination">
+
+        <button
+          (click)="prevReservationPage()"
+          [disabled]="reservationPage==1">
+          <
+        </button>
+
+        <span>{{reservationPage}}</span>
+
+        <button
+          (click)="nextReservationPage()"
+          [disabled]="reservationPage==reservationTotalPages">
+          >
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div *ngIf="tab==='profile'" class="profile-container">
+      <div class="profile-header">
+
+        <!-- LEFT PROFILE ICON -->
+        <div class="profile-left">
+
+          <div class="profile-icon">
+
+      <span class="material-icons" *ngIf="profile.role==='CHEF'">
+        restaurant
+      </span>
+
+            <span class="material-icons" *ngIf="profile.role==='WAITER'">
+        room_service
+      </span>
+
+          </div>
+
+          <div class="profile-info">
+
+            <h2>{{profile.firstName}} {{profile.lastName}}</h2>
+
+            <p>{{profile.email}}</p>
+
+            <div class="role-row">
+
+              <span class="role">{{profile.role}}</span>
+
+              <span class="approved">Approved</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT BUTTONS -->
+        <div class="profile-actions">
+
+          <button class="password-btn"
+                  (click)="openChange()">
+            Change Password
+          </button>
+
+          <button class="edit-btn"
+                  (click)="isEditMode=true"
+                  *ngIf="!isEditMode">
+
+            <span class="material-icons">edit</span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- PERSONAL DETAILS -->
+
+      <div class="section">
+
+        <h3>Personal Details</h3>
+
+        <div class="grid">
+
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text"
+                   [(ngModel)]="profile.firstName"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text"
+                   [(ngModel)]="profile.lastName"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date"
+                   [(ngModel)]="profile.dob"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <select [(ngModel)]="profile.gender"
+                    [disabled]="!isEditMode">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text"
+                   [(ngModel)]="profile.phone"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text"
+                   [(ngModel)]="profile.email"
+                   readonly>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ADDRESS -->
+
+      <div class="section">
+
+        <h3>Address Details</h3>
+
+        <div class="grid">
+
+          <div class="form-group">
+            <label>Door No</label>
+            <input type="text"
+                   [(ngModel)]="profile.doorNo"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text"
+                   [(ngModel)]="profile.address"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>City</label>
+            <input type="text"
+                   [(ngModel)]="profile.city"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>State</label>
+            <input type="text"
+                   [(ngModel)]="profile.state"
+                   [readonly]="!isEditMode">
+          </div>
+
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text"
+                   [(ngModel)]="profile.pincode"
+                   [readonly]="!isEditMode">
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- EDUCATION DETAILS -->
+
+      <div class="section">
+
+        <h3>Education Details</h3>
+
+        <div *ngFor="let edu of profile.educationDetails; let i=index" class="card-box">
+
+          <div class="grid">
+
+            <div class="form-group">
+              <label>School</label>
+              <input type="text"
+                     [(ngModel)]="edu.school"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Degree</label>
+              <input type="text"
+                     [(ngModel)]="edu.degree"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Year</label>
+              <input type="text"
+                     [(ngModel)]="edu.year"
+                     [readonly]="!isEditMode">
+            </div>
+
+          </div>
+
+          <div class="card-actions" *ngIf="isEditMode">
+
+            <button class="add-btn" (click)="addEducation()">
+              + Add
+            </button>
+
+            <button class="remove-btn" (click)="removeEducation(i)">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <!-- WORK EXPERIENCE -->
+
+      <div class="section">
+
+        <h3>Work Experience</h3>
+
+        <div *ngFor="let work of profile.workDetails; let i=index" class="card-box">
+
+          <div class="grid">
+
+            <div class="form-group">
+              <label>Company</label>
+              <input type="text"
+                     [(ngModel)]="work.company"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Role</label>
+              <input type="text"
+                     [(ngModel)]="work.role"
+                     [readonly]="!isEditMode">
+            </div>
+
+            <div class="form-group">
+              <label>Experience</label>
+              <input type="text"
+                     [(ngModel)]="work.experience"
+                     [readonly]="!isEditMode">
+            </div>
+
+          </div>
+          <div class="card-actions" *ngIf="isEditMode">
+
+            <button class="add-btn" (click)="addWork()">
+              + Add
+            </button>
+
+            <button class="remove-btn" (click)="removeWork(i)">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <!-- DOCUMENTS -->
+
+      <div class="section">
+
+        <h3>Documents</h3>
+
+        <div class="form-group">
+
+          <label>Government ID</label>
+
+          <div class="doc-row">
+
+            <input type="file" *ngIf="isEditMode">
+
+            <button *ngIf="!isEditMode" class="view-btn">
+              <span class="material-icons">visibility</span>
+            </button>
+
+            <button *ngIf="isEditMode" class="remove-btn">
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SAVE BUTTON -->
+
+      <div class="save-section" *ngIf="isEditMode">
+
+        <button class="save-btn" (click)="saveProfile()">
+          Save Changes
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div *ngIf="tab==='payments'" class="payments">
+
+      <!-- ================= RECENT PAYMENTS ================= -->
+      <h2 class="section-title">Recent Payments</h2>
+
+      <div class="table-wrapper">
+
+        <table class="modern-table">
+
+          <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Order ID</th>
+            <th>Method</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+          </thead>
+
+          <tbody>
+
+          <tr *ngFor="let p of recentPayments; let i=index"
+              [class.alt-row]="i % 2 === 1">
+
+            <td>{{p.paymentId}}</td>
+            <td>{{p.orderId}}</td>
+
+            <td>
+         <span class="method-text">
+  {{p.paymentMethod}}
+</span>
+            </td>
+
+            <td class="amount">₹{{p.amount}}</td>
+
+            <td>
+         <span class="status-text">
+  {{p.status}}
+</span>
+            </td>
+
+            <td>{{p.paymentTime | date:'short'}}</td>
+
+          </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================= PAYMENT HISTORY ================= -->
+
+      <!-- ================= PAYMENT HISTORY ================= -->
+
+      <div class="payment-header">
+
+        <h2 class="section-title">Payment History</h2>
+
+        <div class="payment-controls">
+
+          <!-- 🔥 FILTER ICON -->
+          <div class="filter-dropdown">
+
+            <button class="filter-btn" (click)="togglePaymentFilter()">
+              <i class="fa fa-filter"></i>
+            </button>
+
+            <div class="filter-menu" *ngIf="showPaymentFilter">
+
+              <div (click)="setPaymentSort('recent')">
+                <i class="fa fa-arrow-down"></i> Newest First
+              </div>
+
+              <div (click)="setPaymentSort('old')">
+                <i class="fa fa-arrow-up"></i> Oldest First
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- DATE -->
+          <div class="date-filter">
+            <input type="date"
+                   [(ngModel)]="paymentDate"
+                   (change)="applyPaymentFilters()">
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrapper">
+
+        <table class="modern-table">
+
+          <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Order ID</th>
+            <th>Method</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+          </thead>
+
+          <tbody>
+
+          <tr *ngFor="let p of paginatedPayments; let i=index">
+
+            <td>{{p.paymentId}}</td>
+            <td>{{p.orderId}}</td>
+
+            <td>
+        <span class="method-text">
+  {{p.paymentMethod}}
+</span>
+            </td>
+
+            <td class="amount">₹{{p.amount}}</td>
+
+            <td>
+         <span class="status-text">
+  {{p.status}}
+</span>
+            </td>
+
+            <td>{{p.paymentTime | date:'medium'}}</td>
+
+          </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+
+        <button (click)="prevPaymentPage()"
+                [disabled]="paymentPage===1">
+          ‹
+        </button>
+
+        <span>{{paymentPage}}</span>
+
+        <button (click)="nextPaymentPage()"
+                [disabled]="paymentPage===paymentTotalPages">
+          ›
+        </button>
+
+      </div>
+
+    </div>
+
+<!-- RESET PASSWORD POPUP -->
+<div class="overlay" *ngIf="showPopup">
+  <div class="popup">
+
+    <h3>Change Password</h3>
+
+    <input type="password"
+           placeholder="Old Password"
+           [(ngModel)]="oldPassword">
+
+    <input type="password"
+           placeholder="New Password"
+           [(ngModel)]="newPassword"
+           (input)="checkStrength()">
+
+    <div class="strength"
+         [style.color]="strengthColor">
+      {{strengthMessage}}
+    </div>
+
+    <button (click)="changePassword()">Save</button>
+    <button (click)="close()">Cancel</button>
+
+  </div>
+</div>
+  </div>
+</div>

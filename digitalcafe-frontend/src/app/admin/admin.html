@@ -1,0 +1,673 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="profileBox">
+      <img src="https://cdn-icons-png.flaticon.com/512/921/921347.png">
+      <h3>Administrator</h3>
+      <p>Savour Control Panel</p>
+    </div>
+    <div><h2>SAVOUR</h2></div>
+
+
+    <ul>
+
+      <li [class.active]="mode==='dashboard'"
+          (click)="loadDashboard()">
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+      </li>
+
+      <li [class.active]="mode==='pending'"
+          (click)="loadPendingUsers()">
+        <i class="fa-solid fa-user"></i> Pending Users
+      </li>
+
+      <li [class.active]="mode==='approved'"
+          (click)="openApproved()">
+        <i class="fa-solid fa-user-check"></i> Approved Users
+      </li>
+
+      <!-- ✅ NEW QUERIES MENU -->
+      <li [class.active]="mode==='queries'"
+          (click)="openQueries()">
+        <i class="fa-solid fa-envelope"></i> Queries
+      </li>
+
+      <li (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </li>
+
+    </ul>
+
+  </div>
+
+
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+      <!-- WELCOME TEXT -->
+      <div class="welcome-admin">
+        <h2>WELCOME ADMIN</h2>
+        <span>Control & Monitor Your System</span>
+      </div>
+      <div class="messageBtn" (click)="openQueries()">
+
+        <i class="fa-solid fa-envelope"></i>
+        <span>Messages</span>
+
+        <!-- 🔴 BADGE -->
+        <div class="badge" *ngIf="unreadCount > 0">
+          {{unreadCount}}
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- DASHBOARD -->
+    <div *ngIf="mode==='dashboard'">
+
+      <div class="joliTop">
+
+        <div class="joliBox">
+          <div class="jIcon"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <h1>{{approvedUsers.length}}</h1>
+            <p>REGISTERED USERS</p>
+          </div>
+        </div>
+
+        <div class="joliBox">
+          <div class="jIcon"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <h1>{{pendingUsers.length}}</h1>
+            <p>PENDING REQUESTS</p>
+          </div>
+        </div>
+
+        <div class="joliBox">
+          <div class="jIcon"><i class="fa-solid fa-utensils"></i></div>
+          <div>
+            <h1>{{approvedChefCount}}</h1>
+            <p>TOTAL CHEFS</p>
+          </div>
+        </div>
+
+        <div class="joliBox green">
+          <div class="timeBig">{{todayTime}}</div>
+          <div class="timeSmall">{{todayDate}}</div>
+        </div>
+        <div class="joliBox">
+          <div class="jIcon"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <h1>{{totalCustomers}}</h1>
+            <p>TOTAL CUSTOMERS</p>
+          </div>
+        </div>
+
+        <div class="joliBox">
+          <div class="jIcon"><i class="fa-solid fa-store"></i></div>
+          <div>
+            <h1>{{totalCafes}}</h1>
+            <p>TOTAL CAFES</p>
+          </div>
+        </div>
+        <div class="joliBox revenue">
+          <div class="jIcon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div>
+            <h1>₹{{totalRevenue}}</h1>
+            <p>TOTAL REVENUE</p>
+          </div>
+        </div>
+        <div class="joliBox revenue">
+          <div class="jIcon">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+          </div>
+          <div>
+            <h1>₹{{todayRevenue}}</h1>
+            <p>TODAY'S REVENUE</p>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <!-- CHARTS -->
+      <div class="joliCharts">
+
+        <div class="joliCard">
+          <h3>Users Distribution</h3>
+          <div class="chartWrap">
+            <canvas id="approvedChart"></canvas>
+          </div>
+        </div>
+
+        <div class="joliCard">
+          <h3>Pending Overview</h3>
+          <div class="chartWrap">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="joliCard" style="margin-top:25px;">
+        <h3>Weekly Revenue</h3>
+
+        <div class="chartWrap">
+          <canvas id="weeklyChart"></canvas>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+    <!-- PENDING USERS -->
+    <div *ngIf="mode==='pending'">
+
+      <h2>Pending Users</h2>
+
+      <div class="pendingContainer">
+
+        <!-- LEFT SIDE (TABLE) -->
+        <div class="tableSection modern-table">
+
+          <!-- TOP CONTROLS -->
+          <div class="top-controls">
+
+            <!-- FILTER -->
+            <div class="filter-dropdown">
+              <i class="fa-solid fa-filter"></i>
+              <select (change)="filterRole($event)">
+                <option value="ALL">All</option>
+                <option value="CUSTOMER">Customer</option>
+                <option value="CHEF">Chef</option>
+                <option value="WAITER">Waiter</option>
+              </select>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="searchBox">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input placeholder="Search..."
+                     (input)="searchPending($event)">
+            </div>
+
+          </div>
+
+
+          <!-- TABLE CARD -->
+          <div class="tableCard">
+
+            <table *ngIf="paginatedPending.length > 0">
+
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let u of paginatedPending"
+                  (click)="selectUser(u)"
+                  class="clickable-row">
+
+                <td>{{u.userId}}</td>
+
+                <td>{{u.email}}</td>
+
+                <td>{{u.phone}}</td>
+
+                <td>
+                  <span class="role-badge">{{u.role}}</span>
+                </td>
+
+                <td>
+                  <button class="approve-btn"
+                          (click)="approve(u.userId); $event.stopPropagation()">
+                    Approve
+                  </button>
+
+                  <button class="reject-btn"
+                          (click)="reject(u.userId); $event.stopPropagation()">
+                    Reject
+                  </button>
+                </td>
+
+              </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <!-- CLEAN PAGINATION -->
+          <div class="pagination-clean">
+
+            <button (click)="prevPending()"
+                    [disabled]="pendingCurrentPage===1">
+              ‹
+            </button>
+
+            <span>
+      Page {{pendingCurrentPage}} of {{pendingTotalPages}}
+    </span>
+
+            <button (click)="nextPending()"
+                    [disabled]="pendingCurrentPage===pendingTotalPages">
+              ›
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE (DETAILS PANEL) -->
+        <!-- OVERLAY -->
+        <div class="overlay"
+             *ngIf="selectedUser"
+             (click)="closeDetails()">
+        </div>
+
+        <!-- RIGHT SLIDE DRAWER -->
+        <div class="drawer"
+             [class.open]="selectedUser">
+
+          <div class="drawerHeader">
+            <h3>{{selectedUser?.role}}</h3>
+            <button class="closeBtn" (click)="closeDetails()">✕</button>
+          </div>
+
+          <div class="drawerContent">
+
+            <!-- PERSONAL -->
+            <div class="section">
+              <h4>Personal Details</h4>
+
+              <p>
+                <b>Name:</b>
+                {{selectedUser?.personalDetails?.firstName}}
+                {{selectedUser?.personalDetails?.lastName}}
+              </p>
+
+              <p><b>DOB:</b> {{selectedUser?.personalDetails?.dob}}</p>
+              <p><b>Gender:</b> {{selectedUser?.personalDetails?.gender}}</p>
+
+              <p><b>Email:</b> {{selectedUser?.email}}</p>
+              <p><b>Phone:</b> {{selectedUser?.phone}}</p>
+            </div>
+
+            <!-- ADDRESS -->
+            <div class="section">
+              <h4>Address</h4>
+
+              <p><b>Street:</b> {{selectedUser?.addressDetails?.street}}</p>
+              <p><b>City:</b> {{selectedUser?.addressDetails?.city}}</p>
+              <p><b>State:</b> {{selectedUser?.addressDetails?.state}}</p>
+              <p><b>Pincode:</b> {{selectedUser?.addressDetails?.pincode}}</p>
+            </div>
+
+            <!-- EDUCATION -->
+            <div class="section">
+              <h4>Education</h4>
+
+              <p *ngFor="let edu of selectedUser?.educationDetails">
+                🎓 {{edu.degree}} - {{edu.year}}
+              </p>
+            </div>
+
+            <!-- WORK -->
+            <div class="section">
+              <h4>Work</h4>
+
+              <p *ngFor="let work of selectedUser?.workDetails">
+                💼 {{work.role}} - {{work.experience}}
+              </p>
+            </div>
+
+            <!-- GOVT ID -->
+            <div class="section">
+              <h4>Government ID</h4>
+
+              <p><b>Type:</b> {{selectedUser?.documentDetails?.type}}</p>
+              <p><b>Number:</b> {{selectedUser?.documentDetails?.number}}</p>
+
+              <button class="viewBtn"
+                      (click)="viewGovtId(selectedUser?.documentDetails?.fileName)">
+                <i class="fa-solid fa-eye"></i> View ID
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- APPROVED USERS -->
+    <!-- APPROVED USERS -->
+    <!-- APPROVED USERS -->
+    <div *ngIf="mode==='approved'" class="restaurant-wrapper">
+
+      <!-- TOP SUMMARY CARDS -->
+      <div class="summary-cards">
+
+        <div class="summary-box">
+          <h2>{{approvedChefCount}}</h2>
+          <p>Total Chef</p>
+        </div>
+
+        <div class="summary-box green">
+          <h2>{{approvedCustomerCount}}</h2>
+          <p>Total Customer</p>
+        </div>
+
+        <div class="summary-box red">
+          <h2>{{approvedWaiterCount}}</h2>
+          <p>Total Waiter</p>
+        </div>
+
+        <div class="summary-box brown">
+          <h2>{{totalCafes}}</h2>
+          <p>Total Owner</p>
+        </div>
+
+        <button class="add-owner-btn" (click)="addOwner()">
+          + Add Owner
+        </button>
+
+      </div>
+
+
+      <!-- FILTER ROW -->
+      <div class="filter-container">
+
+        <div class="filter-dropdown">
+          <i class="fa-solid fa-filter"></i>
+
+          <select (change)="filterApproved($event)">
+            <option value="ALL">All</option>
+            <option value="CUSTOMER">Customer</option>
+            <option value="CHEF">Chef</option>
+            <option value="WAITER">Waiter</option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- TABLE -->
+      <div class="tableCard">
+
+        <table *ngIf="approvedPaginated.length>0">
+
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let u of approvedPaginated">
+            <td>{{u.userId}}</td>
+            <td>{{u.email}}</td>
+            <td>{{u.phone}}</td>
+            <td>
+              <span class="role-badge">{{u.role}}</span>
+            </td>
+          </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINATION AT BOTTOM -->
+      <div class="pagination-clean">
+
+        <button (click)="prevApproved()"
+                [disabled]="approvedCurrentPage===1">
+          ‹
+        </button>
+
+        <span>
+    Page {{approvedCurrentPage}} of {{approvedTotalPages}}
+  </span>
+
+        <button (click)="nextApproved()"
+                [disabled]="approvedCurrentPage===approvedTotalPages">
+          ›
+        </button>
+
+      </div>
+
+    </div>
+    <!-- OWNER REGISTRATION MODAL -->
+    <!-- OWNER MODAL -->
+    <div class="modal-overlay" *ngIf="showOwnerModal">
+
+      <div class="modal-box large">
+
+        <div class="modal-header">
+
+          <h2>Owner Registration</h2>
+
+          <button class="close-icon" (click)="closeOwnerModal()">
+            ✕
+          </button>
+
+        </div>
+        <div class="steps">
+          <span [class.active]="step===1">1</span>
+          <span [class.active]="step===2">2</span>
+          <span [class.active]="step===3">3</span>
+          <span [class.active]="step===4">4</span>
+          <span [class.active]="step===5">5</span>
+          <span [class.active]="step===6">6</span>
+        </div>
+
+        <!-- STEP CONTENT -->
+        <div class="form-content">
+
+          <!-- STEP 1 -->
+          <div *ngIf="step===1">
+            <h3>Personal</h3>
+
+            <input [(ngModel)]="ownerData.firstName" placeholder="First Name">
+            <input [(ngModel)]="ownerData.lastName" placeholder="Last Name">
+            <input type="date" [(ngModel)]="ownerData.dob">
+
+            <select [(ngModel)]="ownerData.gender" class="modern-select">
+              <option value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+
+            <input [(ngModel)]="ownerData.phone" placeholder="Phone">
+            <input [(ngModel)]="ownerData.email" placeholder="Email">
+          </div>
+          <!-- STEP 2 -->
+          <div *ngIf="step===2">
+            <h3>Address</h3>
+
+            <input [(ngModel)]="ownerData.doorNo" placeholder="Door No">
+            <input [(ngModel)]="ownerData.address" placeholder="Address">
+            <input [(ngModel)]="ownerData.city" placeholder="City">
+            <input [(ngModel)]="ownerData.state" placeholder="State">
+            <input [(ngModel)]="ownerData.pincode" placeholder="Pincode">
+          </div>
+          <!-- STEP 3 -->
+
+
+          <!-- STEP 4 -->
+          <div *ngIf="step===3">
+            <h3>Education</h3>
+
+            <div *ngFor="let edu of ownerData.educationList; let i=index">
+
+              <input [(ngModel)]="edu.college" placeholder="College">
+              <input [(ngModel)]="edu.degree" placeholder="Degree">
+              <input [(ngModel)]="edu.year" placeholder="Year">
+
+            </div>
+
+            <button class="btn-add" (click)="addEducation()">+ Add</button>
+            <button class="btn-remove" (click)="removeEducation()">- Remove</button>
+
+          </div>
+
+          <!-- STEP 5 -->
+          <div *ngIf="step===4">
+            <h3>Work</h3>
+
+            <div *ngFor="let work of ownerData.workList; let i=index">
+
+              <input [(ngModel)]="work.company" placeholder="Company">
+              <input [(ngModel)]="work.role" placeholder="Role">
+              <input [(ngModel)]="work.experience" placeholder="Experience">
+
+            </div>
+
+            <button class="btn-add" (click)="addWork()">+ Add</button>
+            <button class="btn-remove" (click)="removeWork()">- Remove</button>
+          </div>
+
+          <!-- STEP 6 -->
+          <div *ngIf="step===5">
+            <h3>Upload Document</h3>
+            <input type="file" (change)="onFileSelect($event)">
+          </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="modal-actions">
+
+          <button class="btn-outline"
+                  (click)="prevStep()"
+                  *ngIf="step>1">
+            Previous
+          </button>
+
+          <button class="btn-primary"
+                  (click)="nextStep()"
+                  *ngIf="step<5">
+            Next
+          </button>
+
+          <button class="btn-success"
+                  *ngIf="step===5"
+                  (click)="submitOwner()">
+            Submit
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+    <!-- QUERIES SECTION -->
+    <div *ngIf="mode==='queries'" class="restaurant-wrapper">
+
+      <div class="queries-container">
+
+        <h2>User Queries</h2>
+
+        <div class="table-wrapper">
+          <table class="query-table">
+
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Status</th>
+              <th>Reply</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let q of queries">
+
+              <td>{{q.id}}</td>
+              <td>{{q.name}}</td>
+
+              <td class="email">{{q.email}}</td>
+
+              <td class="message">{{q.message}}</td>
+
+              <td>
+            <span [ngClass]="q.reply ? 'done' : 'pending'">
+              {{q.reply ? 'REPLIED' : 'PENDING'}}
+            </span>
+              </td>
+
+              <td>
+                <button class="reply-btn" (click)="openReplyModal(q)">
+                  Reply
+                </button>
+              </td>
+
+            </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+      <!-- MODAL -->
+      <div class="modal-overlay" *ngIf="showModal">
+
+        <div class="modal-box">
+
+          <div class="modal-header">
+            <h3>Reply to {{selectedQuery?.name}}</h3>
+            <span class="close-btn" (click)="closeModal()">✖</span>
+          </div>
+
+          <div class="modal-body">
+            <p><b>Email:</b> {{selectedQuery?.email}}</p>
+            <p><b>Message:</b> {{selectedQuery?.message}}</p>
+
+            <textarea [(ngModel)]="replyText" placeholder="Type your reply..."></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button class="send-btn" (click)="sendReply()">Send Reply</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

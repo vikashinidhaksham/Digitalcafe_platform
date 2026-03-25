@@ -1,0 +1,259 @@
+<div class="page-bg">
+
+  <div class="register-container">
+    <div class="back-arrow" (click)="goLanding()">←</div>
+
+    <!-- ROLE SELECT -->
+    <div *ngIf="!roleSelected" class="tab-content role-select">
+
+      <h2 class="role-title">What do you want to Login as?</h2>
+
+      <div class="role-row">
+
+        <div class="role-card">
+          <i class="fa fa-store role-icon"></i>
+          <h2>Owner</h2>
+          <button class="btn-fill" (click)="selectRole('CHEF')">Continue as Cafe Owner</button>
+        </div>
+
+        <div class="role-card">
+          <i class="fa fa-user role-icon"></i>
+          <h2>Customer</h2>
+          <button class="btn-fill" (click)="selectRole('CUSTOMER')">Continue as Customer</button>
+        </div>
+
+      </div>
+
+      <p class="signin-text">
+        Already registered?
+        <span (click)="goLogin()">Sign in</span>
+      </p>
+
+    </div>
+
+
+    <!-- MAIN FORM -->
+    <div *ngIf="roleSelected">
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div [class.active]="activeTab===1">Personal</div>
+        <div [class.active]="activeTab===2">Address</div>
+        <div [class.active]="activeTab===3">Education</div>
+        <div [class.active]="activeTab===4">Work</div>
+        <div [class.active]="activeTab===5">Documents</div>
+        <!-- ⭐ ONLY ADD THIS -->
+        <div *ngIf="selectedRole==='CHEF'" [class.active]="activeTab===6">Cafe</div>
+      </div>
+
+      <div *ngIf="activeTab===1" class="tab-content form-grid">
+
+        <div class="form-group floating">
+          <i class="fa fa-user"></i>
+          <input type="text" required [(ngModel)]="personal.firstName">
+          <label>First Name</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-user"></i>
+          <input type="text" required [(ngModel)]="personal.lastName">
+          <label>Last Name</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-calendar"></i>
+          <input type="date" required [(ngModel)]="personal.dob">
+          <label>Date of Birth</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-venus-mars"></i>
+          <select required [(ngModel)]="personal.gender">
+            <option value=""></option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+          <label>Gender</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-phone"></i>
+          <input type="text" required [(ngModel)]="personal.phone">
+          <label>Phone Number</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-envelope"></i>
+          <input type="email" required [(ngModel)]="personal.gmail">
+          <label>Email</label>
+        </div>
+
+      </div>
+
+      <div *ngIf="activeTab===2" class="tab-content form-grid">
+
+        <div class="form-group floating">
+          <i class="fa fa-home"></i>
+          <input type="text" name="doorNo" [(ngModel)]="address.doorNo" required>
+          <label>Door No</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-map-marker-alt"></i>
+          <input type="text" name="landmark" [(ngModel)]="address.landmark" required>
+          <label>Address</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-city"></i>
+          <input type="text" name="city" [(ngModel)]="address.city" required>
+          <label>City</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-map"></i>
+          <input type="text" name="state" [(ngModel)]="address.state" required>
+          <label>State</label>
+        </div>
+
+        <div class="form-group floating">
+          <i class="fa fa-mail-bulk"></i>
+          <input type="text" name="pincode" [(ngModel)]="address.pincode" required>
+          <label>Pincode</label>
+        </div>
+
+      </div>
+
+      <div *ngIf="activeTab===3" class="tab-content">
+
+        <h3 class="section-title">Education</h3>
+
+        <div *ngFor="let edu of educationList; let i = index" class="edu-card">
+
+          <div class="form-grid">
+
+            <div class="form-group floating">
+              <i class="fa fa-school"></i>
+              <input type="text" name="school{{i}}" [(ngModel)]="edu.school" required>
+              <label>School / College</label>
+            </div>
+
+            <div class="form-group floating">
+              <i class="fa fa-graduation-cap"></i>
+              <input type="text" name="degree{{i}}" [(ngModel)]="edu.degree" required>
+              <label>Degree</label>
+            </div>
+
+            <div class="form-group floating full-width">
+              <i class="fa fa-calendar-alt"></i>
+              <input type="text" name="year{{i}}" [(ngModel)]="edu.year" required>
+              <label>Year</label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="multi-actions">
+          <button class="btn-outline" (click)="addEducation()">+ Add Education</button>
+          <button class="btn-outline remove-main"
+                  (click)="removeEducation(educationList.length-1)"
+                  [disabled]="educationList.length===1">− Remove Education</button>
+        </div>
+
+      </div>
+
+
+      <!-- WORK -->
+      <div *ngIf="activeTab===4" class="tab-content">
+
+        <h3 class="section-title">Work Experience</h3>
+
+        <div *ngFor="let work of workList; let i = index" class="edu-card">
+
+          <div class="form-grid">
+
+            <div class="form-group floating">
+              <i class="fa fa-building"></i>
+              <input type="text" name="company{{i}}" [(ngModel)]="work.company" required>
+              <label>Company Name</label>
+            </div>
+
+            <div class="form-group floating">
+              <i class="fa fa-user-tie"></i>
+              <input type="text" name="role{{i}}" [(ngModel)]="work.role" required>
+              <label>Role</label>
+            </div>
+
+            <div class="form-group floating full-width">
+              <i class="fa fa-briefcase"></i>
+              <input type="text" name="exp{{i}}" [(ngModel)]="work.experience" required>
+              <label>Experience (e.g. 2 years)</label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="multi-actions">
+          <button class="btn-outline" (click)="addWork()">+ Add Work</button>
+          <button class="btn-outline remove-main"
+                  (click)="removeWork(workList.length-1)"
+                  [disabled]="workList.length===1">− Remove Work</button>
+        </div>
+
+      </div>
+
+
+      <!-- DOCUMENT -->
+      <div *ngIf="activeTab===5" class="tab-content">
+
+        <h3 class="section-title">Upload Document</h3>
+
+        <div class="upload-card">
+
+          <i class="fa fa-cloud-upload-alt upload-icon"></i>
+
+          <p class="upload-text">
+            Drag & drop or click to upload your document
+          </p>
+
+          <input type="file" (change)="onFileChange($event)" hidden #fileInput>
+
+          <button class="btn-outline" (click)="fileInput.click()">
+            Choose File
+          </button>
+
+          <p class="file-name" *ngIf="documentFile">
+            {{ documentFile.name }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- ⭐⭐⭐ NEW TAB 6 FOR CHEF ONLY -->
+
+
+
+      <!-- NAV BUTTONS -->
+      <div class="nav-buttons">
+
+        <button class="btn-outline" (click)="prev()">Previous</button>
+
+        <button *ngIf="activeTab < 5"
+                class="btn-fill"
+                (click)="next()">Next</button>
+
+        <button *ngIf="activeTab === 5"
+                class="btn-fill"
+                (click)="submit()">Submit</button>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

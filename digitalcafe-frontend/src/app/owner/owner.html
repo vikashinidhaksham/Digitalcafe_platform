@@ -1,0 +1,1538 @@
+<!-- ===== WELCOME PAGE ===== -->
+
+<div *ngIf="page==='welcome'" class="welcome">
+  <button class="backBtn" (click)="goLogin()">
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>
+  <h1 class="welcomeTitle">WELCOME {{ownerName}}</h1>
+
+  <p class="selectCafeText">Select the cafe</p>
+
+  <!-- ADD CAFE CARD -->
+  <div class="cafeGrid">
+
+    <!-- ADD CARD -->
+    <div class="cafeCard addCafeCard" (click)="openAddCafe()">
+      <div class="bigPlus">+</div>
+      <p>Add Cafe</p>
+    </div>
+
+    <!-- EXISTING CAFES -->
+    <div class="cafeCard"
+         *ngFor="let c of cafes"
+         (click)="selectCafeCard(c)">
+
+      <!-- IMAGE -->
+      <img class="cafeImg"
+           [src]="getCafeImage(c)">
+      <!-- NAME -->
+      <h2>{{c.name}}</h2>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ===== ADD CAFE POPUP ===== -->
+
+<div class="overlay" *ngIf="showAdd">
+
+  <div class="popup">
+    <!-- CLOSE BUTTON -->
+    <button class="popupCloseBtn"
+            (click)="closeAddCafe()">✖</button>
+    <h2>Cafe Registration</h2>
+
+    <!-- STEP INDICATOR -->
+    <div class="steps">
+      <span *ngFor="let s of [1,2,3,4,5,6]"
+            [class.active]="step===s">{{s}}</span>
+    </div>
+
+    <!-- ================= STEP 1 ================= -->
+    <div *ngIf="step===1">
+      <h3>Basic Information</h3>
+
+      <input placeholder="Cafe Name" [(ngModel)]="newCafe.name">
+      <input placeholder="Tagline" [(ngModel)]="newCafe.tagline">
+      <textarea placeholder="Description" [(ngModel)]="newCafe.description"></textarea>
+      <input placeholder="Contact Number" [(ngModel)]="newCafe.phone">
+      <input placeholder="Opening Time" [(ngModel)]="newCafe.openTime">
+      <input placeholder="Closing Time" [(ngModel)]="newCafe.closeTime">
+    </div>
+
+    <!-- ================= STEP 2 ================= -->
+    <div *ngIf="step===2">
+      <h3>Address Details</h3>
+
+      <input placeholder="Street No" [(ngModel)]="newCafe.streetNo">
+      <input placeholder="Street Name" [(ngModel)]="newCafe.streetName">
+      <input placeholder="Landmark" [(ngModel)]="newCafe.landmark">
+      <input placeholder="State" [(ngModel)]="newCafe.state">
+      <input placeholder="Country" [(ngModel)]="newCafe.country">
+      <input placeholder="Pincode" [(ngModel)]="newCafe.pincode">
+    </div>
+
+    <!-- ================= STEP 3 ================= -->
+    <div *ngIf="step===3">
+      <h3>Legal & Compliance</h3>
+
+      <input placeholder="FSSAI License Number" [(ngModel)]="newCafe.fssai">
+      <input placeholder="GST Number" [(ngModel)]="newCafe.gst">
+      <input placeholder="Trade License Number" [(ngModel)]="newCafe.tradeLicense">
+    </div>
+
+    <!-- ================= STEP 4 ================= -->
+    <div *ngIf="step===4">
+      <h3>Banking Details</h3>
+
+      <input placeholder="Account Holder Name" [(ngModel)]="newCafe.accountName">
+      <input placeholder="Bank Name" [(ngModel)]="newCafe.bankName">
+      <input placeholder="Account Number" [(ngModel)]="newCafe.accountNumber">
+      <input placeholder="IFSC Code" [(ngModel)]="newCafe.ifsc">
+    </div>
+
+    <!-- ================= STEP 5 ================= -->
+    <div *ngIf="step===5">
+      <h3>Government ID Upload</h3>
+
+      <label>Upload Government ID</label>
+      <input type="file" (change)="onGovtIdUpload($event)">
+    </div>
+
+    <div *ngIf="step===6">
+      <h3>Cafe Photos</h3>
+
+      <label>Upload Multiple Photos</label>
+
+      <!-- 🔥 FILE INPUT -->
+      <input type="file"
+             multiple
+             (change)="onCafePhotosUpload($event)">
+
+      <!-- 🔥 PREVIEW SECTION -->
+      <div class="preview">
+
+        <div class="imgBox"
+             *ngFor="let img of previewImages; let i=index">
+
+          <img [src]="img">
+
+          <!-- OPTIONAL: REMOVE BUTTON -->
+          <button class="removeBtn"
+                  (click)="previewImages.splice(i,1); newCafe.photos.splice(i,1)">
+            ✖
+          </button>
+
+        </div>
+
+      </div>
+
+      <small>First image will be used for card panel</small>
+
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="popupButtons">
+
+      <button *ngIf="step>1"
+              class="cancelBtn"
+              (click)="step=step-1">
+        Back
+      </button>
+
+      <button *ngIf="step<6"
+              class="addBtn"
+              (click)="step=step+1">
+        Next
+      </button>
+
+      <button *ngIf="step===6"
+              class="addBtn"
+              (click)="submitCafe()">
+        Submit
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<!-- ===== MAIN OWNER DASHBOARD ===== -->
+
+<div *ngIf="page!=='welcome'" class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- logo / cafe name -->
+    <div class="cafeTop">
+      {{cafeName || 'Cafe'}}
+    </div>
+
+    <button class="sideItem" (click)="page='dashboard'">
+      <i class="fa-regular fa-house"></i>
+      Dashboard
+    </button>
+
+    <button class="sideItem" (click)="page='staff'">
+      <i class="fa-regular fa-id-badge"></i>
+      Staff Management
+    </button>
+
+    <button class="sideItem" (click)="page='menu';loadMenu()">
+      <i class="fa-regular fa-clipboard"></i>
+      Menu Management
+    </button>
+    <button class="sideItem" (click)="page='tables';loadTable()">
+
+      <i class="fa-regular fa-square"></i>
+      Table Management
+    </button>
+
+
+    <button class="sideItem" (click)="page='reservations'; loadReservations()">
+      <i class="fa-solid fa-calendar-check"></i>
+      Reservation Management
+    </button>
+
+    <button class="sideItem" (click)="page='orders'; loadOrders()">
+      <i class="fa-solid fa-utensils"></i>
+      Order Management
+    </button>
+
+    <button class="sideItem" (click)="page='payments'; loadPayments()">
+      <i class="fa-solid fa-credit-card"></i>
+      Payment Management
+    </button>
+    <button class="sideItem" (click)="page='cafeManagement'; loadCafeDetails()">
+      <i class="fa-regular fa-building"></i>
+      Cafe Management
+    </button>
+
+    <div class="sideDivider"></div>
+
+    <button class="sideItem logoutBtn" (click)="logout()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      Logout
+    </button>
+
+  </div>
+
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div *ngIf="page==='dashboard'">
+
+      <h1>Welcome to {{cafeName}}</h1>
+
+      <!-- TOP ROW -->
+      <div class="dashRow">
+
+        <!-- LEFT SIDE -->
+        <div class="dashCards">
+
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+
+            <div class="statText">
+              <p>Total Chefs</p>
+              <h3>{{chefCount}}</h3>
+            </div>
+
+          </div>
+
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="statText">
+              <p>Total Waiters</p>
+              <h3>{{waiterCount}}</h3>
+            </div>
+
+          </div>
+
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+
+            <div class="statText">
+              <p>Total Revenue</p>
+              <h3>₹ {{totalRevenue}}</h3>
+            </div>
+
+          </div>
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-calendar-day"></i>
+            </div>
+
+            <div class="statText">
+              <p>Today's Revenue</p>
+              <h3>₹ {{todayRevenue || 0}}</h3>
+            </div>
+
+          </div>
+
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-table"></i>
+            </div>
+
+            <div class="statText">
+              <p>Total Tables</p>
+              <h3>{{tables.length}}</h3>
+            </div>
+
+          </div>
+          <div class="statCard">
+
+            <div class="iconBox">
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+
+            <div class="statText">
+              <p>Total Menu</p>
+              <h3>{{menuList.length}}</h3>
+            </div>
+
+          </div>
+        </div>
+        <!-- RIGHT SIDE -->
+        <div class="specialCard">
+
+          <h2>Chef Special</h2>
+
+          <img
+            [src]="chefSpecial?.images?.length
+? 'http://localhost:8080/uploads/' + chefSpecial.images[0]
+: 'assets/nofood.png'">
+          <h3>{{chefSpecial?.name || 'No Dish Yet'}}</h3>
+
+          <p class="price">₹ {{chefSpecial?.price || '--'}}</p>
+
+        </div>
+
+      </div>
+      <div class="revenueCard">
+
+        <h2>Daily Revenue</h2>
+        <canvas #revenueChart></canvas>
+
+      </div>
+      <div class="analyticsSection">
+
+        <div class="modernCard">
+          <div class="cardTop">
+            <h3>Food Categories</h3>
+            <span class="seeMore">See More →</span>
+          </div>
+
+          <div class="chart-layout">
+
+            <!-- LEFT: LEGEND LIST -->
+            <div class="chart-legend-left">
+              <div class="chart-legend-item"
+                   *ngFor="let item of foodChartLabels">
+                <div class="legend-dot" [style.background]="item.color"></div>
+                <div class="legend-info">
+                  <span class="legend-label">{{ item.label }}</span>
+                  <span class="legend-count">{{ item.count }} items</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: CHART -->
+            <div class="chartWrapper">
+              <canvas id="foodChart"></canvas>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT CARD -->
+        <div class="modernCard">
+
+          <div class="cardTop">
+            <h3>Your Ratings</h3>
+            <span class="seeMore">See More →</span>
+          </div>
+
+          <div class="ratingMain">
+            <h1>4.5<span>/5</span></h1>
+
+            <div class="stars">
+              ★ ★ ★ ★ ☆
+            </div>
+
+            <p class="completedText">
+              164 Completed Orders
+            </p>
+          </div>
+
+          <div class="reviewList">
+
+            <div class="reviewRow">
+              <img src="https://i.pravatar.cc/45?img=1">
+              <div>
+                <strong>Rahul</strong>
+                <div class="smallStars">★★★★★</div>
+              </div>
+            </div>
+
+            <div class="reviewRow">
+              <img src="https://i.pravatar.cc/45?img=2">
+              <div>
+                <strong>Anitha</strong>
+                <div class="smallStars">★★★★☆</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= STAFF MANAGEMENT ================= -->
+    <div *ngIf="page==='staff'" class="staffWrapper">
+
+      <h1 class="title1">Staff Management</h1>
+
+      <!-- FILTER BAR -->
+      <div class="topBar">
+
+        <input type="text"
+               placeholder="Search staff..."
+               [(ngModel)]="staffSearchText"
+               (input)="applyStaffFilters()">
+
+        <div class="filterWrapper">
+
+          <button class="filterIconBtn"
+                  (click)="toggleFilterMenu()">
+            <i class="fa-solid fa-filter"></i>
+          </button>
+
+          <div class="filterDropdown"
+               *ngIf="showFilterMenu">
+
+            <div (click)="setRoleFilter('ALL')">All Roles</div>
+            <div (click)="setRoleFilter('WAITER')">Waiter</div>
+            <div (click)="setRoleFilter('CHEF')">Chef</div>
+            <div (click)="setRoleFilter('MANAGER')">Manager</div>
+
+          </div>
+
+        </div>
+
+        <button class="addProductBtn"
+                (click)="openModal()">
+          <i class="fa-solid fa-plus"></i> Add Staff
+        </button>
+
+      </div>
+
+      <!-- TABLE -->
+      <div class="tableCard">
+
+        <table class="modernTable">
+
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let s of staffPaginated"
+              (click)="openDetail(s)"
+              class="clickableRow">
+
+            <td>
+              <strong>
+                {{s.personal_details?.firstName}}
+                {{s.personal_details?.lastName}}
+              </strong>
+            </td>
+
+            <td>{{s.email}}</td>
+            <td>{{s.phone}}</td>
+
+            <td>
+          <span class="roleBadge"
+                [ngClass]="s.role.toLowerCase()">
+            {{s.role}}
+          </span>
+            </td>
+
+            <td class="actionCell">
+
+              <button class="editBtn"
+                      (click)="editStaff(s); $event.stopPropagation()">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+
+              <button class="deleteBtn"
+                      (click)="deleteStaff(s.userId); $event.stopPropagation()">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+
+            </td>
+
+          </tr>
+          </tbody>
+
+        </table>
+
+        <!-- PAGINATION -->
+        <div class="paginationWrapper">
+
+          <button class="navBtn"
+                  [disabled]="staffCurrentPage===1"
+                  (click)="changeStaffPage(staffCurrentPage-1)">‹</button>
+
+          <button *ngFor="let p of staffVisiblePages"
+                  [class.active]="p===staffCurrentPage"
+                  (click)="changeStaffPage(p)">
+            {{p}}
+          </button>
+
+          <button class="navBtn"
+                  [disabled]="staffCurrentPage===staffTotalPages"
+                  (click)="changeStaffPage(staffCurrentPage+1)">›</button>
+
+        </div>
+
+      </div>
+
+      <!-- KEEP YOUR EXISTING MODAL HERE -->
+      <div class="staffModalRoot" *ngIf="showModal">
+
+        <div class="staffModalBox">
+
+          <!-- 🔥 KEEP THIS -->
+          <div class="staffModalHeader">
+            <h3>{{editMode ? 'Edit Staff' : 'Add Staff'}}</h3>
+            <button class="staffCloseBtn" (click)="closeModal()">✖</button>
+          </div>
+
+          <!-- 🔥 KEEP THIS -->
+          <div class="staffModalBody">
+            <!-- Your existing modal body content -->
+            <h4 class="sectionTitle">Personal Details</h4>
+
+            <label>First Name</label>
+            <input [(ngModel)]="staff.personal_details.firstName">
+
+            <label>Last Name</label>
+            <input [(ngModel)]="staff.personal_details.lastName">
+            <label>Upload Photo</label>
+            <input type="file" (change)="onPhotoSelect($event)">
+
+            <div class="photoPreview" *ngIf="previewPhoto">
+              <img [src]="previewPhoto">
+            </div>
+            <label>Date of Birth</label>
+            <input type="date" [(ngModel)]="staff.personal_details.dob">
+
+            <label>Gender</label>
+            <select [(ngModel)]="staff.personal_details.gender">
+              <option value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+
+            <label>Role</label>
+            <select [(ngModel)]="staff.role">
+              <option>WAITER</option>
+              <option>CHEF</option>
+              <option>MANAGER</option>
+            </select>
+
+            <label>Phone</label>
+            <input [(ngModel)]="staff.phone">
+
+            <label>Email</label>
+            <input [(ngModel)]="staff.email">
+
+
+            <!-- ================= ADDRESS ================= -->
+            <h4 class="sectionTitle">Address Details</h4>
+
+            <label>Door No</label>
+            <input [(ngModel)]="staff.address_details.door">
+
+            <label>Address</label>
+            <input [(ngModel)]="staff.address_details.address">
+
+            <label>City</label>
+            <input [(ngModel)]="staff.address_details.city">
+
+            <label>State</label>
+            <input [(ngModel)]="staff.address_details.state">
+
+            <label>Pincode</label>
+            <input [(ngModel)]="staff.address_details.pincode">
+
+
+            <!-- ================= EDUCATION ================= -->
+            <h4 class="sectionTitle">Education Details</h4>
+
+            <div *ngFor="let e of staff.education_details; let i=index" class="cardBlock">
+
+              <label>School</label>
+              <input [(ngModel)]="e.school" [name]="'school'+i">
+
+              <label>Degree</label>
+              <input [(ngModel)]="e.degree" [name]="'degree'+i">
+
+              <label>Year</label>
+              <input [(ngModel)]="e.year" [name]="'year'+i">
+
+              <div class="rowButtons">
+                <button type="button" class="removeBtn"
+                        (click)="removeEducation(i)">
+                  Remove
+                </button>
+              </div>
+
+            </div>
+
+            <button type="button" class="addBtn" (click)="addEducation()">
+              + Add Education
+            </button>
+
+
+            <!-- ================= WORK ================= -->
+            <h4 class="sectionTitle">Work Experience</h4>
+
+            <div *ngFor="let w of staff.work_details; let i=index" class="cardBlock">
+
+              <label>Company</label>
+              <input [(ngModel)]="w.company" [name]="'company'+i">
+
+              <label>Role</label>
+              <input [(ngModel)]="w.role" [name]="'role'+i">
+
+              <label>Experience</label>
+              <input [(ngModel)]="w.exp" [name]="'exp'+i">
+
+              <div class="rowButtons">
+                <button type="button" class="removeBtn"
+                        (click)="removeWork(i)">
+                  Remove
+                </button>
+              </div>
+
+            </div>
+
+            <button type="button" class="addBtn" (click)="addWork()">
+              + Add Work Experience
+            </button>
+
+            <!-- ================= DOCUMENT ================= -->
+            <h4 class="sectionTitle">Documents</h4>
+
+            <label>Upload Proof</label>
+            <input type="file" (change)="onProofUpload($event)">
+
+          </div>
+
+          <div class="staffModalFooter">
+            <button class="staffSaveBtn" (click)="saveStaff()">Save</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="detailBackdrop" *ngIf="selectedStaff" (click)="closeDetail()"></div>
+
+    <div class="detailPanel" *ngIf="selectedStaff" (click)="$event.stopPropagation()">
+
+      <!-- HEADER -->
+      <div class="dp-header">
+        <h2>{{ selectedStaff?.role }}</h2>
+        <button class="dp-close" (click)="closeDetail()">✕</button>
+      </div>
+
+      <!-- BODY -->
+      <div class="dp-body">
+
+        <!-- NAME + ROLE BADGE -->
+        <div class="dp-name-row">
+          <h3 class="dp-name">
+            {{ selectedStaff?.personal_details?.firstName }}
+            {{ selectedStaff?.personal_details?.lastName }}
+          </h3>
+          <span class="dp-role-badge">{{ selectedStaff?.role }}</span>
+        </div>
+
+        <!-- PERSONAL DETAILS -->
+        <div class="dp-section">
+          <h4 class="dp-section-title">PERSONAL DETAILS</h4>
+          <div class="dp-grid-2">
+            <div class="dp-field">
+              <label>DOB</label>
+              <span>{{ selectedStaff?.personal_details?.dob || '—' }}</span>
+            </div>
+            <div class="dp-field">
+              <label>GENDER</label>
+              <span>{{ selectedStaff?.personal_details?.gender || '—' }}</span>
+            </div>
+          </div>
+          <div class="dp-field full">
+            <label>EMAIL</label>
+            <span>{{ selectedStaff?.email || '—' }}</span>
+          </div>
+          <div class="dp-field full">
+            <label>PHONE</label>
+            <span>{{ selectedStaff?.phone || '—' }}</span>
+          </div>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="dp-section">
+          <h4 class="dp-section-title">ADDRESS</h4>
+          <div class="dp-field full">
+            <label>STREET</label>
+            <span>{{ selectedStaff?.address_details?.address || '—' }}</span>
+          </div>
+          <div class="dp-grid-2">
+            <div class="dp-field">
+              <label>CITY</label>
+              <span>{{ selectedStaff?.address_details?.city || '—' }}</span>
+            </div>
+            <div class="dp-field">
+              <label>STATE</label>
+              <span>{{ selectedStaff?.address_details?.state || '—' }}</span>
+            </div>
+          </div>
+          <div class="dp-field">
+            <label>PINCODE</label>
+            <span>{{ selectedStaff?.address_details?.pincode || '—' }}</span>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="dp-section" *ngIf="selectedStaff?.education_details?.length">
+          <h4 class="dp-section-title">EDUCATION</h4>
+          <div class="dp-card-block" *ngFor="let e of selectedStaff.education_details">
+            <div class="dp-card-title">{{ e.degree || '—' }}</div>
+            <div class="dp-card-sub">{{ e.school || '—' }}</div>
+            <div class="dp-card-meta">{{ e.year || '' }}</div>
+          </div>
+        </div>
+
+        <!-- WORK EXPERIENCE -->
+        <div class="dp-section" *ngIf="selectedStaff?.work_details?.length">
+          <h4 class="dp-section-title">WORK EXPERIENCE</h4>
+          <div class="dp-card-block" *ngFor="let w of selectedStaff.work_details">
+            <div class="dp-card-title">{{ w.role || '—' }}</div>
+            <div class="dp-card-sub">{{ w.company || '—' }}</div>
+            <div class="dp-card-meta">{{ w.exp || '' }}</div>
+          </div>
+        </div>
+
+        <!-- GOVERNMENT ID -->
+        <div class="dp-section">
+          <h4 class="dp-section-title">GOVERNMENT ID</h4>
+          <button class="dp-view-btn" (click)="viewProof()">
+            👁 View Document
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ================= MENU MANAGEMENT ================= -->
+
+    <!-- ================= MENU MANAGEMENT TABLE ================= -->
+
+    <div *ngIf="page==='menu'" class="menuWrapper">
+
+      <h1 class="title1">Menu Management</h1>
+
+      <!-- FILTER BAR -->
+      <div class="topBar">
+
+        <input type="text"
+               placeholder="Search item..."
+               [(ngModel)]="searchText"
+               (input)="applyMenuFilters()">
+
+        <select [(ngModel)]="filterCategory"
+                (change)="applyMenuFilters()">
+          <option value="ALL">All Categories</option>
+          <option>Beverages</option>
+          <option>Appetizer</option>
+          <option>Chef Special</option>
+          <option>Desserts</option>
+          <option>Main Course</option>
+        </select>
+
+        <select [(ngModel)]="filterStatus"
+                (change)="applyMenuFilters()">
+          <option value="ALL">All Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+
+        <button class="addProductBtn"
+                (click)="openAddMenu()">
+          <i class="fa-solid fa-plus"></i> Add Item
+        </button>
+
+      </div>
+
+
+      <!-- TABLE -->
+      <div class="tableCard">
+
+        <table class="modernTable">
+
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let m of paginatedMenu">
+
+            <td>
+              <strong>{{m.name}}</strong>
+            </td>
+
+            <td>₹ {{m.price}}</td>
+            <td>{{m.category}}</td>
+
+            <td>
+              <div class="statusDropdown"
+                   (click)="toggleStatus(m)">
+
+            <span class="dot"
+                  [class.green]="m.status==='ACTIVE'"
+                  [class.red]="m.status==='INACTIVE'">
+            </span>
+
+                {{m.status==='ACTIVE' ? 'Active' : 'Inactive'}}
+
+                <i class="fa-solid fa-angle-down"></i>
+              </div>
+            </td>
+
+            <td class="actionCell">
+
+              <button class="iconBtn"
+                      (click)="openImagePopup(m)">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+
+              <button class="edit" (click)="editMenu(m)">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+
+              <button class="deleteIcon"
+                      (click)="deleteMenu(m.id)">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+
+            </td>
+
+          </tr>
+          </tbody>
+
+        </table>
+
+
+        <!-- PAGINATION -->
+        <div class="paginationWrapper">
+
+          <button class="navBtn"
+                  [disabled]="menuCurrentPage===1"
+                  (click)="changeMenuPage(menuCurrentPage-1)">‹</button>
+
+          <button *ngFor="let p of visiblePages"
+                  [class.active]="p===menuCurrentPage"
+                  (click)="changeMenuPage(p)">
+            {{p}}
+          </button>
+
+          <button class="navBtn"
+                  [disabled]="menuCurrentPage===menuTotalPages"
+                  (click)="changeMenuPage(menuCurrentPage+1)">›</button>
+
+        </div>
+
+      </div>
+
+
+      <!-- IMAGE POPUP -->
+      <div class="overlay" *ngIf="showImagePopup">
+        <div class="imagePopup">
+
+          <h3>Food Images</h3>
+
+          <div class="imageGrid">
+            <img *ngFor="let img of selectedImages"
+                 [src]="'http://localhost:8080/uploads/'+img">
+          </div>
+
+          <button (click)="closeImagePopup()">Close</button>
+
+        </div>
+      </div>
+
+      </div>
+    <div class="popupOverlay" *ngIf="showMenuAdd">
+
+      <div class="popupBox">
+
+        <h2 class="popupTitle">
+          {{ editingMenuId ? 'Edit Item' : 'Add Item' }}
+        </h2>
+
+        <div class="formGroup">
+          <label>Item Name</label>
+          <input type="text" [(ngModel)]="newMenu.name">
+        </div>
+
+        <div class="row">
+          <div class="formGroup">
+            <label>Price</label>
+            <input type="number" [(ngModel)]="newMenu.price">
+          </div>
+
+          <div class="formGroup">
+            <label>Category</label>
+            <select [(ngModel)]="newMenu.category">
+              <option>Beverages</option>
+              <option>Appetizer</option>
+              <option>Chef Special</option>
+              <option>Desserts</option>
+              <option>Main Course</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="formGroup">
+          <label>Description</label>
+          <textarea [(ngModel)]="newMenu.description"></textarea>
+        </div>
+
+        <div class="formGroup">
+          <label>Upload Images</label>
+          <input type="file" multiple (change)="uploadMenuImages($event)">
+        </div>
+
+        <div class="popupActions">
+          <button class="saveBtn" (click)="saveMenu()">
+            {{ editingMenuId ? 'Update Item' : 'Add Item' }}
+          </button>
+
+          <button class="cancelBtn" (click)="closeMenuPopup()">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <!-- ================= TABLE MANAGEMENT ================= -->
+    <div *ngIf="page==='tables'" class="tableWrapper">
+
+      <h1 class="title1">Table Management</h1>
+
+      <!-- TOP SECTION -->
+      <div class="tableTopSection">
+
+        <!-- LEFT SIDE -->
+        <div class="tableLeft">
+
+          <!-- ADD TABLE ROW -->
+          <div class="addTableRow">
+
+            <div class="formGroup">
+              <label>Table Name</label>
+              <input type="text" [(ngModel)]="newTable.name">
+            </div>
+
+            <div class="formGroup">
+              <label>Seating Size</label>
+              <input type="number" [(ngModel)]="newTable.size">
+            </div>
+
+            <div class="formGroup">
+              <label>Description</label>
+              <input type="text" [(ngModel)]="newTable.description">
+            </div>
+
+            <button class="addBtn" (click)="addTable()">+ Add</button>
+
+          </div>
+
+          <!-- SEARCH + FILTER -->
+          <div class="topBar">
+
+            <input type="text"
+                   placeholder="Search table..."
+                   [(ngModel)]="tableSearchText"
+                   (input)="applyTableFilters()">
+
+            <select [(ngModel)]="filterTableStatus"
+                    (change)="applyTableFilters()">
+              <option value="ALL">All Status</option>
+              <option value="AVAILABLE">Available</option>
+              <option value="UNAVAILABLE">Booked</option>
+            </select>
+
+            <!-- DATE PICKER -->
+            <input type="date"
+                   [(ngModel)]="selectedDate"
+                   (change)="checkAvailability()">
+            <select [(ngModel)]="selectedTime">
+              <option value="">Select Time</option>
+              <option *ngFor="let t of timeSlots" [value]="t">
+                {{t}}
+              </option>
+            </select>
+
+            <!-- CHECK BUTTON -->
+            <button class="checkBtn"
+                    (click)="checkAvailability()">
+              Check
+            </button>
+
+          </div>
+
+          <!-- TABLE LIST -->
+          <div class="tableCard">
+
+            <table class="modernTable">
+              <thead>
+              <tr><th>ID</th>
+                <th>Name</th>
+                <th>Seating Size</th>
+                <th>Booking ID</th>
+                <th>Booking Time</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let t of paginatedTables">
+
+                <td>{{t.id}}</td>
+
+                <td><strong>{{t.name}}</strong></td>
+
+                <td>{{t.size}}</td>
+
+                <td>{{t.bookingId || '-'}}</td>
+
+                <td>{{t.bookingTime || '-'}}</td>
+
+                <td>{{t.customerLastName || '-'}}</td>
+                <td>
+<span class="statusBadge"
+      [class.available]="t.status==='AVAILABLE'"
+      [class.booked]="t.status==='UNAVAILABLE'">
+  {{t.status === 'UNAVAILABLE' ? 'UNAVAILABLE' : 'AVAILABLE'}}
+</span>
+                </td>
+
+                <td class="actionCell">
+
+                  <button class="editBtn"
+                          (click)="editTable(t)">
+                    <i class="fa-solid fa-pen"></i> Edit
+                  </button>
+
+                  <button class="deleteBtn"
+                          (click)="deleteTableUI(t)">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+
+                </td>
+
+              </tr>
+              </tbody>
+            </table>
+
+            <div class="paginationWrapper">
+
+              <!-- Previous -->
+              <button class="navBtn"
+                      [disabled]="tableCurrentPage === 1"
+                      (click)="changeTablePage(tableCurrentPage - 1)">
+                ‹
+              </button>
+
+              <!-- Only 3 Visible Pages -->
+              <button *ngFor="let p of visibleTablePages"
+                      [class.active]="p === tableCurrentPage"
+                      (click)="changeTablePage(p)">
+                {{p}}
+              </button>
+
+              <!-- Next -->
+              <button class="navBtn"
+                      [disabled]="tableCurrentPage === tableTotalPages"
+                      (click)="changeTablePage(tableCurrentPage + 1)">
+                ›
+              </button>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE CALENDAR -->
+
+
+
+
+
+
+      </div>
+
+    </div>
+    <!-- ================= RESERVATION MANAGEMENT ================= -->
+
+    <div *ngIf="page==='reservations'" class="reservationWrapper">
+
+      <h1 class="title1">Reservation Management</h1>
+      <div class="reservationCards">
+
+
+        <div class="resCard todayCard">
+          <h2>{{todayReservations}}</h2>
+          <p>Today's Reservations</p>
+        </div>
+
+        <div class="resCard upcomingCard">
+          <h2>{{upcomingReservations}}</h2>
+          <p>Upcoming Reservations</p>
+        </div>
+
+        <div class="resCard completedCard">
+          <h2>{{completedReservations}}</h2>
+          <p>Completed Today</p>
+        </div>
+
+      </div>
+      <div class="reservationFilterBar">
+
+        <!-- SEARCH -->
+        <input
+          type="text"
+          placeholder="Search by Table Name or ID"
+          [(ngModel)]="reservationSearch"
+          (input)="applyReservationFilters()"
+        >
+
+        <!-- FILTER -->
+        <select
+          [(ngModel)]="reservationFilter"
+          (change)="applyReservationFilters()"
+        >
+          <option value="ALL">All</option>
+          <option value="TODAY">Today</option>
+          <option value="UPCOMING">Upcoming</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+
+        <!-- DATE FILTER -->
+        <input
+          type="date"
+          [(ngModel)]="reservationDate"
+          (change)="applyReservationFilters()"
+        >
+
+      </div>
+      <div class="tableCard">
+
+        <table class="modernTable">
+
+          <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Table ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Customer</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let r of paginatedReservations">
+
+            <td>{{r.bookingId}}</td>
+
+            <td>{{r.tableId}}</td>
+
+
+            <td>{{r.bookingDate}}</td>
+
+            <td>{{r.bookingTime}}</td>
+
+            <td>{{r.lastName}}</td>
+
+            <td>
+              <!-- REPLACE WITH -->
+              <span class="statusBadge"
+                    [ngClass]="getReservationStatusColor(r)">
+  {{ getReservationStatusText(r) }}
+</span>
+            </td>
+
+          </tr>
+          </tbody>
+
+        </table>
+        <div class="paginationWrapper">
+
+          <button class="navBtn"
+                  [disabled]="resCurrentPage===1"
+                  (click)="changeReservationPage(resCurrentPage-1)">
+            ‹
+          </button>
+
+          <button *ngFor="let p of visibleResPages"
+                  [class.active]="p===resCurrentPage"
+                  (click)="changeReservationPage(p)">
+            {{p}}
+          </button>
+
+          <button class="navBtn"
+                  [disabled]="resCurrentPage===resTotalPages"
+                  (click)="changeReservationPage(resCurrentPage+1)">
+            ›
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- ================= ORDER MANAGEMENT ================= -->
+
+    <div *ngIf="page==='orders'" class="orderWrapper">
+
+      <h1 class="title1">Order Management</h1>
+      <div class="orderCards">
+
+        <div class="orderCard pendingCard">
+          <h2>{{pendingOrders}}</h2>
+          <p>Pending Orders</p>
+        </div>
+
+        <div class="orderCard preparingCard">
+          <h2>{{preparingOrders}}</h2>
+          <p>Preparing Orders</p>
+        </div>
+
+        <div class="orderCard completedCard">
+          <h2>{{completedOrders}}</h2>
+          <p>Completed Orders</p>
+        </div>
+
+      </div>
+      <div class="order-controls">
+
+        <!-- SEARCH -->
+        <div class="search-box">
+          <i class="fa fa-search"></i>
+          <input type="text"
+                 placeholder="Search by Order ID or Customer..."
+                 (input)="searchOrders($event)">
+        </div>
+
+        <!-- FILTER -->
+        <div class="filter-box">
+          <i class="fa fa-filter"></i>
+          <select (change)="filterOrders($event)">
+            <option value="ALL">All Orders</option>
+            <option value="PENDING">Pending</option>
+            <option value="PREPARING">Preparing</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="tableCard">
+
+        <table class="order-table">
+
+          <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Booking ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let o of paginatedOrders">
+
+            <td class="col-order">{{o.orderId}}</td>
+
+            <td class="col-booking">
+              {{o.bookingId || '-'}}
+            </td>
+
+            <td class="col-customer">
+              {{o.customerName || ('User ' + o.customerId)}}
+            </td>
+
+            <td class="col-total">
+              ₹ {{o.totalAmount}}
+            </td>
+
+            <td class="col-status">
+  <span class="status-badge"
+        [ngClass]="getOrderColor(o)">
+  {{
+    o.orderStatus === 'CANCELLED' ? 'CANCELLED' :
+    (o.waiterStatus === 'SERVED' ? 'COMPLETED' :
+    (o.chefStatus === 'COMPLETED' ? 'PREPARING' : 'PENDING'))
+  }}
+</span>
+            </td>
+
+          </tr>
+          </tbody>
+
+
+          <div class="paginationWrapper">
+
+            <button class="navBtn"
+                    [disabled]="orderCurrentPage===1"
+                    (click)="changeOrderPage(orderCurrentPage-1)">
+              ‹
+            </button>
+
+            <button *ngFor="let p of visibleOrderPages"
+                    [class.active]="p===orderCurrentPage"
+                    (click)="changeOrderPage(p)">
+              {{p}}
+            </button>
+
+            <button class="navBtn"
+                    [disabled]="orderCurrentPage===orderTotalPages"
+                    (click)="changeOrderPage(orderCurrentPage+1)">
+              ›
+            </button>
+
+          </div>
+
+        </table>
+
+      </div>
+
+    </div>
+    <!-- ================= PAYMENT MANAGEMENT ================= -->
+
+    <div *ngIf="page==='payments'" class="paymentWrapper">
+
+      <h1 class="title1">Payment Management</h1>
+      <div class="paymentFilterBar">
+
+        <input
+          type="date"
+          [(ngModel)]="paymentDateFilter"
+          (change)="applyPaymentFilter()"
+        />
+
+      </div>
+      <div class="tableCard">
+
+        <table class="modernTable">
+
+          <thead>
+          <tr>
+
+            <th>Payment ID</th>
+            <th>Order ID</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Payment Date</th>
+            <th>Status</th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tbody>
+
+          <tr *ngFor="let p of paginatedPayments">
+
+            <td>{{p.paymentId}}</td>
+
+            <td>{{p.orderId}}</td>
+
+            <td>₹ {{p.amount}}</td>
+
+            <td>{{p.paymentMethod}}</td>
+            <td>{{p.paymentTime | date:'yyyy-MM-dd HH:mm'}}</td>
+
+            <td>{{p.status}}</td>
+
+          </tr>
+
+          </tbody>
+
+        </table>
+        <div class="paginationWrapper">
+
+          <!-- PREVIOUS -->
+          <button class="navBtn"
+                  [disabled]="paymentCurrentPage === 1"
+                  (click)="changePaymentPage(paymentCurrentPage - 1)">
+            ‹
+          </button>
+
+          <!-- PAGE NUMBERS -->
+          <button *ngFor="let p of visiblePaymentPages"
+                  [class.active]="p === paymentCurrentPage"
+                  (click)="changePaymentPage(p)">
+            {{p}}
+          </button>
+
+          <!-- NEXT -->
+          <button class="navBtn"
+                  [disabled]="paymentCurrentPage === paymentTotalPages"
+                  (click)="changePaymentPage(paymentCurrentPage + 1)">
+            ›
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- ================= CAFE MANAGEMENT ================= -->
+
+    <div *ngIf="page==='cafeManagement'" class="cafeManageWrapper">
+
+      <!-- IMAGE SLIDER TOP -->
+      <div class="carouselWrapper">
+        <div class="carouselTrack"
+             [style.transform]="'translateX(-' + (currentImageIndex * 100) + '%)'">
+
+          <img *ngFor="let img of cafeImages"
+               [src]="'http://localhost:8080/uploads/'+img">
+        </div>
+      </div>
+      <div class="thumbnailContainer">
+        <img *ngFor="let img of cafeImages; let i=index"
+             [src]="'http://localhost:8080/uploads/'+img"
+             [class.activeThumb]="i===currentImageIndex"
+             (click)="selectImage(i)">
+      </div>
+
+      <!-- DETAILS CARD -->
+      <div class="cafeDetailsCard">
+
+        <!-- EDIT BUTTON TOP RIGHT -->
+        <button class="editCafeBtn"
+                (click)="editCafe()">
+          ✏
+        </button>
+        <button class="deleteCafeBtn"
+                (click)="deleteCafe()">
+          🗑
+        </button>
+        <h2>{{selectedCafe?.name}}</h2>
+        <div class="statusBadge"
+             [ngClass]="selectedCafe?.status?.toLowerCase()">
+          {{selectedCafe?.status || 'PENDING'}}
+        </div>
+        <p><strong>Tagline:</strong> {{selectedCafe?.tagline || '-'}}</p>
+        <p><strong>Description:</strong> {{selectedCafe?.description || '-'}}</p>
+        <p><strong>Phone:</strong> {{selectedCafe?.phone || '-'}}</p>
+        <p><strong>Email:</strong> {{selectedCafe?.email || '-'}}</p>
+
+        <hr>
+
+        <h3>Address</h3>
+        <p>
+          {{selectedCafe?.streetNo || ''}}
+          {{selectedCafe?.streetName || ''}},
+          {{selectedCafe?.landmark || ''}},
+          {{selectedCafe?.state || ''}},
+          {{selectedCafe?.country || ''}}
+          - {{selectedCafe?.pincode || ''}}
+        </p>
+
+        <hr>
+
+        <h3>Legal Details</h3>
+        <p><strong>FSSAI:</strong> {{selectedCafe?.fssai || '-'}}</p>
+        <p><strong>GST:</strong> {{selectedCafe?.gst || '-'}}</p>
+        <p><strong>Trade License:</strong> {{selectedCafe?.tradeLicense || '-'}}</p>
+
+        <hr>
+
+        <h3>Bank Details</h3>
+        <p><strong>Account Holder:</strong> {{selectedCafe?.accountName || '-'}}</p>
+        <p><strong>Bank:</strong> {{selectedCafe?.bankName || '-'}}</p>
+        <p><strong>Account No:</strong> {{selectedCafe?.accountNumber || '-'}}</p>
+        <p><strong>IFSC:</strong> {{selectedCafe?.ifsc || '-'}}</p>
+
+        <hr>
+
+        <!-- GOVERNMENT ID BELOW BANK -->
+        <h3>Government ID</h3>
+
+        <button class="viewIdBtn"
+                (click)="viewGovtId()">
+          👁 View Government ID
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+

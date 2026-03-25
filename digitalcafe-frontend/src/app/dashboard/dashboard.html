@@ -1,0 +1,414 @@
+<div class="dashboard-wrapper">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="logo">
+      <i class="fa fa-book"></i>
+    </div>
+
+    <ul class="menu">
+
+      <li class="active" (click)="tab='dashboard'">
+        <i class="fa fa-home"></i> Dashboard
+      </li>
+
+      <li (click)="tab='orders'">
+        <i class="fa fa-shopping-cart"></i> Orders
+      </li>
+
+      <li (click)="tab='reservations'">
+        <i class="fa fa-calendar"></i> Reservations
+      </li>
+
+      <li (click)="tab='profile'">
+        <i class="fa fa-user"></i> Edit Profile
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+      <!-- LEFT -->
+      <div class="logo">
+        Savour
+      </div>
+
+      <!-- RIGHT -->
+      <div class="top-right">
+
+        <span class="cafe-tab" (click)="goToCafe()">Cafe</span>
+
+        <!-- PROFILE ICON -->
+        <i class="fa fa-user-circle profile-icon"
+           (click)="toggleProfile()"></i>
+
+        <!-- DROPDOWN -->
+        <div class="dropdown" *ngIf="showProfile">
+
+          <p (click)="openAbout()">About</p>
+
+          <p (click)="resetPassword()">Reset Password</p>
+
+          <p (click)="logout()">Logout</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DASHBOARD TAB -->
+    <div *ngIf="tab==='dashboard'" class="dashboard">
+
+
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat-card">
+          <h4>Total Orders</h4>
+          <h2>{{totalOrders}}</h2>
+        </div>
+
+        <div class="stat-card">
+          <h4>Total Amount</h4>
+          <h2>₹{{totalAmount}}</h2>
+        </div>
+
+        <div class="stat-card">
+          <h4>Reservations</h4>
+          <h2>{{reservationsCount}}</h2>
+        </div>
+
+        <div class="stat-card">
+          <h4>Customers</h4>
+          <h2>{{customers}}</h2>
+        </div>
+
+      </div>
+
+
+      <!-- GRID SECTION -->
+      <div class="grid">
+
+        <!-- CALENDAR -->
+        <div class="calendar-card">
+
+          <div class="calendar-header">
+            <button (click)="prevMonth()">❮</button>
+
+            <span>
+      {{ monthNames[currentMonth] }} {{ currentYear }}
+    </span>
+
+            <button (click)="nextMonth()">❯</button>
+          </div>
+
+          <!-- Day Names -->
+          <div class="calendar-days">
+            <div *ngFor="let d of days" class="day-name">
+              {{ d }}
+            </div>
+          </div>
+
+          <!-- Calendar Dates -->
+          <div class="calendar-grid">
+
+            <div
+              *ngFor="let d of calendarDates"
+              class="date"
+              [ngClass]="getDateClass(d)"
+            >
+              {{ d.day }}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- CHART -->
+        <div class="chart-card">
+
+          <h3>Payment Performance</h3>
+
+          <canvas id="chart"></canvas>
+
+        </div>
+
+        <!-- ACTIVITIES NOTIFICATION -->
+        <div class="activity-card">
+
+          <h3>Activities Notification</h3>
+
+          <div *ngFor="let r of dashboardReservations"
+               class="reservation-card"
+               [ngClass]="getReservationStatus(r)">
+
+            <div class="row1">
+
+              <div>
+                <b>Booking ID :</b> {{r.bookingId}}
+              </div>
+
+              <div class="customer">
+                <b>Customer Name :</b> {{r.lastName}}
+              </div>
+
+            </div>
+
+            <div class="row2">
+
+              <span><b>Table No :</b> {{r.tableId}}</span>
+
+              <span><b>Table Name :</b> {{r.tableName}}</span>
+
+              <span><b>Date :</b> {{r.bookingDate}}</span>
+
+              <span><b>Time :</b> {{r.bookingTime}}</span>
+
+            </div>
+
+          </div>
+
+          <div class="view-all" (click)="tab='reservations'">
+            View All →
+          </div>
+
+        </div>
+
+
+        <!-- TOP FOOD ITEMS -->
+        <div class="top-card">
+
+          <h3>Top Food Items</h3>
+
+          <div *ngFor="let food of topFoods" class="top-food-item">
+
+            <img
+              [src]="'http://localhost:8080/uploads/' + food.image"
+              class="food-img"
+            />
+
+            <div class="food-info">
+
+              <h4>{{food.name}}</h4>
+              <p>₹{{food.price}}</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ORDERS TAB -->
+    <div *ngIf="tab==='orders'" class="orders">
+
+      <h2>Orders</h2>
+
+      <div class="order-card" *ngFor="let o of orders">
+
+        <!-- HEADER (Clickable) -->
+        <div class="order-header" (click)="toggleOrder(o)">
+
+    <span class="order-id">
+      Order #{{o.orderId}}
+    </span>
+
+          <i class="fa"
+             [ngClass]="o.open ? 'fa-chevron-up' : 'fa-chevron-down'">
+          </i>
+
+        </div>
+
+
+        <!-- COLLAPSIBLE DETAILS -->
+        <div class="order-details" *ngIf="o.open">
+
+          <!-- Row 1 : Cafe Name -->
+          <div class="cafe-name">
+            Savour Cafe
+          </div>
+
+
+          <!-- Row 2 -->
+          <div class="info-row">
+
+            <div><b>Table No:</b> {{o.tableNo}}</div>
+            <div><b>Table Name:</b> {{o.tableName || 'Not Assigned'}}</div>
+            <div><b>Customer:</b> {{o.lastName}}</div>
+
+            <button class="download-btn">
+              <i class="fa fa-download"></i> Download
+            </button>
+
+            <span class="badge served" *ngIf="o.waiterStatus=='SERVED'">
+      Served
+    </span>
+
+          </div>
+
+
+          <!-- Row 3 -->
+          <div class="info-row">
+
+            <div><b>Payment ID:</b> {{o.paymentId}}</div>
+            <div><b>Booking ID:</b> {{o.bookingId}}</div>
+            <div><b>Date:</b> {{o.bookingDate}}</div>
+            <div><b>Time:</b> {{o.bookingTime}}</div>
+
+          </div>
+
+
+          <!-- STATUS FLOW -->
+          <div class="status-bar">
+
+            <div class="step"
+                 [class.active]="o.chefStatus=='PENDING'">
+              Pending
+            </div>
+
+            <div class="step"
+                 [class.active]="o.chefStatus=='PREPARING'">
+              Preparing
+            </div>
+
+            <div class="step"
+                 [class.active]="o.chefStatus=='COMPLETED'">
+              Ready
+            </div>
+
+            <div class="step"
+                 [class.active]="o.waiterStatus=='SERVED'">
+              Served
+            </div>
+
+          </div>
+
+
+          <!-- ORDER SUMMARY -->
+          <div class="summary">
+
+            <h3>Order Summary</h3>
+
+            <div class="item"
+                 *ngFor="let item of o.items">
+
+              <span>{{item.menuName}} x{{item.qty}}</span>
+
+              <span>₹{{item.price}}</span>
+
+            </div>
+
+            <div class="total">
+
+              <b>Total</b>
+              <b>₹{{o.totalAmount}}</b>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div *ngIf="tab==='reservations'" class="reservations">
+
+      <h2>Reservations</h2>
+
+      <!-- FILTER BUTTON -->
+      <div class="filter-bar">
+
+        <select [(ngModel)]="sortOrder" (change)="sortReservations(sortOrder)">
+
+          <option value="asc">Date Ascending</option>
+
+          <option value="desc">Date Descending</option>
+
+        </select>
+
+      </div>
+
+      <div *ngFor="let r of paginatedReservations"
+           class="reservation-card"
+           [ngClass]="getReservationStatus(r)">
+
+        <div class="row1">
+
+          <div>
+            <b>Booking ID :</b> {{r.bookingId}}
+          </div>
+
+          <div class="customer">
+            <b>Customer Name :</b> {{r.lastName}}
+          </div>
+
+        </div>
+
+        <div class="row2">
+
+          <span><b>Table No :</b> {{r.tableNo}}</span>
+
+          <span><b>Table Name :</b> {{r.tableName}}</span>
+
+          <span><b>Date :</b> {{r.bookingDate}}</span>
+
+          <span><b>Time :</b> {{r.bookingTime}}</span>
+
+        </div>
+
+      </div>
+
+      <!-- PAGINATION -->
+
+      <div class="pagination">
+
+        <button (click)="prevPage()" [disabled]="currentPage==1">
+
+          <
+
+        </button>
+
+        <span>{{currentPage}}</span>
+
+        <button (click)="nextPage()"
+                [disabled]="currentPage==totalPages">
+
+          >
+
+        </button>
+
+      </div>
+
+    </div>
+    <!-- PROFILE TAB -->
+    <div *ngIf="tab==='profile'" class="profile">
+
+      <h2>Edit Profile</h2>
+
+      <input [(ngModel)]="user.email" placeholder="Email"/>
+      <input [(ngModel)]="user.phone" placeholder="Phone"/>
+
+      <button (click)="updateProfile()">Update</button>
+
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,1701 @@
+/* ================================================================
+   BREW HAVEN — CHEF / WAITER DASHBOARD
+   Exact match to Admin Dashboard white theme
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --orange-50:   #fff8f1;
+  --orange-100:  #ffedd8;
+  --orange-200:  #fed7aa;
+  --orange-400:  #fb923c;
+  --orange-500:  #f97316;
+  --orange-600:  #ea6c0a;
+  --orange-700:  #c2540a;
+
+  --bg:          #f5f7fa;
+  --surface:     #ffffff;
+  --surface-2:   #f2f4f7;
+  --border:      #e4e8ed;
+  --border-soft: #f0f2f5;
+
+  --text-primary:   #1a1d23;
+  --text-secondary: #4a5568;
+  --text-muted:     #94a3b8;
+
+  --success:    #10b981;
+  --success-bg: #ecfdf5;
+  --danger:     #ef4444;
+  --danger-bg:  #fef2f2;
+  --warning:    #f59e0b;
+  --warning-bg: #fffbeb;
+
+  --sidebar-w:  230px;
+  --radius:     14px;
+  --radius-sm:  10px;
+  --radius-xs:  7px;
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md:  0 8px 24px rgba(0,0,0,0.09);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: #f5f7fa !important;
+  color: var(--text-primary) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--orange-200); border-radius: 99px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LAYOUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.container {
+  display: block !important;
+  min-height: 100vh !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: var(--bg) !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SIDEBAR — matches admin exactly
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sidebar {
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
+  position: fixed !important;
+  top: 0 !important; left: 0 !important;
+  height: 100vh !important;
+  /* same as admin: very light transparent orange */
+  background: rgba(249,115,22,0.055) !important;
+  background-image: none !important;
+  border-right: 1.5px solid rgba(249,115,22,0.13) !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  box-shadow: 2px 0 10px rgba(249,115,22,0.07) !important;
+  z-index: 50 !important;
+}
+
+/* cafe brand name */
+.cafe-name {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: var(--orange-600) !important;
+  letter-spacing: -0.2px !important;
+  padding: 26px 22px 18px !important;
+  border-bottom: 1px solid rgba(249,115,22,0.12) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  -webkit-text-fill-color: var(--orange-600) !important;
+  background: none !important;
+}
+
+/* nav list */
+.menu {
+  list-style: none !important;
+  padding: 14px 10px !important;
+  margin: 0 !important;
+  flex: 1 !important;
+}
+
+.menu li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 11px 14px !important;
+  border-radius: var(--radius-sm) !important;
+  margin-bottom: 3px !important;
+  cursor: pointer !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: var(--text-secondary) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  transition: all 0.18s ease !important;
+  position: relative !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.menu li .material-icons {
+  font-size: 19px !important;
+  color: var(--orange-400) !important;
+  flex-shrink: 0 !important;
+}
+
+.menu li:hover {
+  color: var(--orange-600) !important;
+  background: rgba(249,115,22,0.09) !important;
+  transform: translateX(4px) !important;
+}
+.menu li:hover .material-icons { color: var(--orange-500) !important; }
+
+/* logout */
+.logout-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  margin: 12px !important;
+  padding: 12px 16px !important;
+  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  background: rgba(239,68,68,0.08) !important;
+  color: var(--danger) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.18s !important;
+}
+.logout-btn .material-icons { font-size: 18px !important; color: var(--danger) !important; }
+.logout-btn:hover { background: rgba(239,68,68,0.14) !important; transform: translateX(3px) !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MAIN CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.main-content {
+  margin-left: 230px !important;
+  width: calc(100% - 230px) !important;
+  padding: 30px 34px !important;
+  background: #f5f7fa !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 1 !important;
+  float: none !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PAGE TITLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.title {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.4px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.title .material-icons { color: var(--orange-500) !important; font-size: 24px !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TODAY ORDERS HEADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.today-wrapper { width: 100% !important; }
+
+.today-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 22px !important;
+  flex-wrap: wrap !important;
+}
+
+/* Total orders chip — white card pill */
+.total-orders {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: var(--surface) !important;
+  padding: 9px 18px !important;
+  border-radius: 99px !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: var(--shadow-xs) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--text-secondary) !important;
+}
+.total-orders .material-icons { font-size: 18px !important; color: var(--orange-400) !important; }
+.total-orders b { font-size: 16px !important; font-weight: 800 !important; color: var(--orange-600) !important; }
+
+/* filter buttons */
+.filters {
+  display: flex !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+.filters button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border: 1.5px solid var(--border) !important;
+  padding: 8px 16px !important;
+  border-radius: 99px !important;
+  background: var(--surface) !important;
+  cursor: pointer !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--text-secondary) !important;
+  box-shadow: var(--shadow-xs) !important;
+  transition: all 0.18s !important;
+}
+.filters button .material-icons { font-size: 16px !important; }
+.filters button:hover {
+  border-color: var(--orange-300) !important;
+  color: var(--orange-600) !important;
+  background: var(--orange-50) !important;
+}
+.filters button.active {
+  background: var(--orange-500) !important;
+  border-color: var(--orange-500) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 10px rgba(249,115,22,0.3) !important;
+}
+.filters button.active .material-icons { color: #fff !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ORDER CARDS GRID
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.orders-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important;
+  gap: 18px !important;
+  margin-top: 4px !important;
+}
+
+/* WHITE card — same as admin .joliCard */
+.order-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  border: 1.5px solid #e4e8ed !important;
+  /* remove any inherited border-left from status classes initially */
+}
+.order-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-color: var(--orange-200) !important;
+}
+
+.today-card, .upcoming-card { /* inherits */ }
+
+/* status left-border strip */
+.border-red    { border-left: 4px solid #ef4444 !important; }
+.border-orange { border-left: 4px solid var(--warning) !important; }
+.border-green  { border-left: 4px solid var(--success) !important; }
+
+/* card header — orange gradient — FORCE OVERRIDE */
+.card-header,
+.order-card .card-header,
+.today-card .card-header,
+.upcoming-card .card-header {
+  padding: 15px 18px !important;
+  font-weight: 600 !important;
+  background: linear-gradient(135deg, #ea6c0a, #c2540a) !important;
+  background-image: linear-gradient(135deg, #ea6c0a, #c2540a) !important;
+  background-color: #ea6c0a !important;
+  color: #ffffff !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+}
+.card-header.brown,
+.card-header.yellow,
+.order-card .card-header.brown,
+.order-card .card-header.yellow {
+  background: linear-gradient(135deg, #ea6c0a, #c2540a) !important;
+  background-image: linear-gradient(135deg, #ea6c0a, #c2540a) !important;
+  background-color: #ea6c0a !important;
+  color: #ffffff !important;
+}
+.card-header b,
+.order-card .card-header b {
+  font-size: 16px !important; font-weight: 700 !important;
+  display: block !important; margin-bottom: 2px !important;
+  color: #ffffff !important;
+}
+.card-header div,
+.order-card .card-header div {
+  font-size: 12px !important; opacity: 0.85 !important;
+  margin-top: 2px !important; color: #ffffff !important;
+}
+
+/* menu items — white body */
+.menu-items,
+.order-card .menu-items {
+  padding: 16px 18px !important;
+  flex: 1 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  font-size: 13.5px !important;
+  color: #4a5568 !important;
+  line-height: 1.75 !important;
+  border-bottom: 1px solid #f0f2f5 !important;
+}
+.menu-items div {
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 1px !important;
+}
+.view-more {
+  margin-top: 8px !important;
+  color: var(--orange-500) !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+  cursor: pointer !important;
+}
+.view-more:hover { color: var(--orange-700) !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   STATUS BUTTONS — flow intact
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.status-btn {
+  width: 88% !important;
+  margin: 13px auto !important;
+  display: block !important;
+  padding: 11px !important;
+  border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  transition: all 0.2s !important;
+}
+
+.pending-btn {
+  background: rgba(239,68,68,0.10) !important;
+  color: #dc2626 !important;
+  border: 1.5px solid rgba(239,68,68,0.30) !important;
+}
+.pending-btn:hover {
+  background: rgba(239,68,68,0.18) !important;
+  border-color: #ef4444 !important;
+  transform: translateY(-1px) !important;
+}
+
+.preparing-btn {
+  background: rgba(245,158,11,0.10) !important;
+  color: #b45309 !important;
+  border: 1.5px solid rgba(245,158,11,0.30) !important;
+}
+.preparing-btn:hover {
+  background: rgba(245,158,11,0.18) !important;
+  border-color: var(--warning) !important;
+  transform: translateY(-1px) !important;
+}
+
+.completed-btn {
+  background: rgba(16,185,129,0.10) !important;
+  color: #059669 !important;
+  border: 1.5px solid rgba(16,185,129,0.28) !important;
+}
+.completed-btn:hover {
+  background: rgba(16,185,129,0.18) !important;
+  border-color: var(--success) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   UPCOMING HEADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.upcoming-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 22px !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+}
+
+.upcoming-controls {
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+}
+
+.date-picker {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  background: var(--surface) !important;
+  padding: 9px 16px !important;
+  border-radius: 99px !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+.date-picker:focus-within { border-color: var(--orange-400) !important; }
+.date-picker .material-icons { font-size: 17px !important; color: var(--orange-400) !important; }
+.date-picker input {
+  border: none !important; outline: none !important;
+  background: transparent !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 500 !important;
+  color: var(--text-primary) !important;
+}
+
+.upcoming-count {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  background: var(--surface) !important;
+  padding: 9px 18px !important;
+  border-radius: 99px !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: var(--shadow-xs) !important;
+  font-weight: 600 !important;
+}
+.upcoming-count .icon   { font-size: 19px !important; color: var(--orange-400) !important; }
+.upcoming-count .title1 { font-size: 13px !important; color: var(--text-secondary) !important; }
+.upcoming-count .count  { font-size: 16px !important; font-weight: 800 !important; color: var(--orange-600) !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PAGINATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.pagination {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 28px !important;
+}
+.pagination button {
+  width: 36px !important; height: 36px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-xs) !important;
+  background: var(--surface) !important;
+  color: var(--text-secondary) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important; font-weight: 600 !important;
+  cursor: pointer !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  box-shadow: var(--shadow-xs) !important;
+  transition: all 0.18s !important;
+}
+.pagination button:hover:not(:disabled) {
+  background: var(--orange-500) !important;
+  border-color: var(--orange-500) !important;
+  color: #fff !important;
+}
+.pagination button.active {
+  background: var(--orange-500) !important;
+  border-color: var(--orange-500) !important;
+  color: #fff !important;
+}
+.pagination button:disabled { opacity: 0.3 !important; cursor: not-allowed !important; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   COMPLETED TABLE — white card
+   matches admin .tableCard exactly
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.table-box {
+  background: var(--surface) !important;
+  border-radius: var(--radius) !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: var(--shadow-xs) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+
+.order-table,
+.table-box table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background: #ffffff !important;
+}
+
+.order-table thead,
+.table-box thead { background: var(--surface-2) !important; }
+
+.order-table th,
+.table-box th {
+  text-align: left !important;
+  padding: 13px 20px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+  border-bottom: 1.5px solid var(--border) !important;
+  background: var(--surface-2) !important;
+}
+
+.order-table td,
+.table-box td {
+  padding: 14px 20px !important;
+  font-size: 13.5px !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+  text-align: left !important;
+}
+
+/* Alternating rows: odd = white, even = very light orange */
+.order-table tbody tr:nth-child(odd),
+.table-box tbody tr:nth-child(odd) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.order-table tbody tr:nth-child(even),
+.table-box tbody tr:nth-child(even) {
+  background: rgba(249,115,22,0.04) !important;
+  background-color: rgba(249,115,22,0.04) !important;
+}
+
+.order-table tbody tr:hover,
+.table-box tbody tr:hover {
+  background: rgba(249,115,22,0.09) !important;
+  background-color: rgba(249,115,22,0.09) !important;
+}
+
+.order-table tbody tr:last-child td,
+.table-box tbody tr:last-child td { border-bottom: none !important; }
+
+/* completed pill */
+.status {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 5px 14px !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+.status.completed {
+  background: rgba(249,115,22,0.12) !important;
+  background-color: rgba(249,115,22,0.12) !important;
+  color: #c2540a !important;
+  border: 1.5px solid rgba(249,115,22,0.3) !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.6px !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   POPUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.popup {
+  position: fixed !important; inset: 0 !important;
+  background: rgba(0,0,0,0.5) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  z-index: 9999 !important;
+}
+.popup-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  padding: 32px !important;
+  border-radius: 18px !important;
+  width: 400px !important;
+  max-width: 90vw !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25) !important;
+  border: none !important;
+  position: relative !important;
+  z-index: 10000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.popup-card h2 {
+  font-size: 18px !important; font-weight: 800 !important;
+  color: #1a1d23 !important;
+  margin-bottom: 16px !important; padding-bottom: 14px !important;
+  border-bottom: 2px solid #f0f2f5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.popup-card div {
+  font-size: 14px !important; color: #4a5568 !important;
+  padding: 8px 0 !important; border-bottom: 1px solid #f0f2f5 !important;
+  font-weight: 500 !important;
+}
+.popup-card button {
+  margin-top: 20px !important; width: 100% !important;
+  padding: 13px !important; border: none !important;
+  border-radius: 99px !important;
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important; font-weight: 700 !important;
+  cursor: pointer !important;
+  opacity: 1 !important; visibility: visible !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.38) !important;
+  transition: all 0.2s !important;
+}
+.popup-card button:hover {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PROFILE PAGE — reference UI style
+   Clean white, visible orange buttons
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.profile-container {
+  padding: 0 !important;
+  background: transparent !important;
+  max-width: 860px !important;
+}
+
+/* ── Profile header card ── */
+.profile-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 20px !important;
+  padding: 24px 28px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+.profile-left { display: flex !important; align-items: center !important; gap: 18px !important; }
+
+.profile-icon {
+  width: 66px !important; height: 66px !important;
+  border-radius: 16px !important;
+  background: #ffedd8 !important;
+  background-color: #ffedd8 !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  font-size: 30px !important; color: #f97316 !important;
+  border: 2px solid #fed7aa !important;
+  flex-shrink: 0 !important;
+}
+
+.profile-info h2 {
+  font-size: 20px !important; font-weight: 800 !important;
+  color: #1a1d23 !important; margin: 0 !important;
+  letter-spacing: -0.3px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.profile-info p {
+  font-size: 13px !important; color: #94a3b8 !important; margin-top: 3px !important;
+}
+
+.role-row { display: flex !important; gap: 8px !important; margin-top: 8px !important; align-items: center !important; }
+
+.role {
+  font-weight: 700 !important; font-size: 11px !important;
+  color: #ea6c0a !important;
+  background: #fff8f1 !important; background-color: #fff8f1 !important;
+  border: 1.5px solid #fed7aa !important;
+  padding: 4px 14px !important; border-radius: 99px !important;
+  letter-spacing: 0.5px !important; text-transform: uppercase !important;
+}
+
+.approved {
+  background: #ecfdf5 !important; background-color: #ecfdf5 !important;
+  color: #10b981 !important;
+  padding: 4px 14px !important; border-radius: 99px !important;
+  font-size: 11px !important; font-weight: 700 !important;
+  border: 1.5px solid rgba(16,185,129,0.25) !important;
+  text-transform: uppercase !important; letter-spacing: 0.5px !important;
+}
+
+/* ── Edit button in header — solid orange, clearly visible ── */
+.edit-btn {
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 11px 26px !important;
+  border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important; font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.35) !important;
+  transition: all 0.2s !important;
+  display: inline-flex !important;
+  align-items: center !important; gap: 6px !important;
+  letter-spacing: 0.2px !important;
+}
+.edit-btn:hover {
+  background: #ea6c0a !important; background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(249,115,22,0.45) !important;
+}
+
+/* ── Section cards — white with border ── */
+.section {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  padding: 24px 28px !important;
+  border-radius: 16px !important;
+  margin-bottom: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+
+.section h3 {
+  font-size: 15px !important; font-weight: 700 !important;
+  color: #1a1d23 !important;
+  margin-bottom: 20px !important; padding-bottom: 14px !important;
+  border-bottom: 1.5px solid #f0f2f5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  letter-spacing: -0.1px !important;
+}
+
+/* ── Form grid ── */
+.grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 18px 24px !important;
+  margin-top: 4px !important;
+}
+
+.form-group { display: flex !important; flex-direction: column !important; width: 100% !important; }
+
+.form-group label {
+  font-weight: 700 !important; font-size: 11px !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.7px !important; text-transform: uppercase !important;
+  margin-bottom: 7px !important;
+}
+
+/* Input fields — like reference UI: light gray bg, rounded */
+.form-group input,
+.form-group select {
+  padding: 12px 16px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #e4e8ed !important;
+  background: #f5f7fa !important;
+  background-color: #f5f7fa !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important; color: #1a1d23 !important;
+  width: 100% !important;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s !important;
+  box-sizing: border-box !important;
+  appearance: auto !important;
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: none !important;
+  border-color: #fb923c !important;
+  background: #ffffff !important; background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.12) !important;
+}
+.form-group input::placeholder { color: #94a3b8 !important; }
+.form-group input[readonly],
+.form-group select[disabled] {
+  background: #f5f7fa !important; background-color: #f5f7fa !important;
+  color: #4a5568 !important; cursor: default !important;
+}
+
+/* ── Save button — solid orange block ── */
+.save-btn {
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important; border: none !important;
+  padding: 13px 36px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important; font-weight: 700 !important; cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.38) !important;
+  transition: all 0.2s !important;
+  letter-spacing: 0.2px !important;
+}
+.save-btn:hover {
+  background: #ea6c0a !important; background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(249,115,22,0.48) !important;
+}
+
+/* ── Add / Remove buttons ── */
+.add-btn {
+  background: #fff8f1 !important; background-color: #fff8f1 !important;
+  color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important;
+  padding: 9px 20px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  transition: all 0.18s !important;
+}
+.add-btn:hover {
+  background: #ffedd8 !important; background-color: #ffedd8 !important;
+  border-color: #fb923c !important;
+}
+
+.remove-btn {
+  background: #fef2f2 !important; background-color: #fef2f2 !important;
+  color: #ef4444 !important;
+  border: 1.5px solid rgba(239,68,68,0.3) !important;
+  padding: 9px 20px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important; cursor: pointer !important;
+  transition: all 0.18s !important;
+}
+.remove-btn:hover {
+  background: rgba(239,68,68,0.14) !important; background-color: rgba(239,68,68,0.14) !important;
+}
+
+/* ── View document button ── */
+.view-btn {
+  background: #fff8f1 !important; background-color: #fff8f1 !important;
+  color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important;
+  padding: 9px 20px !important; border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 600 !important;
+  cursor: pointer !important; display: inline-flex !important;
+  align-items: center !important; gap: 6px !important; transition: all 0.18s !important;
+}
+.view-btn:hover {
+  background: #ffedd8 !important; background-color: #ffedd8 !important;
+  border-color: #fb923c !important;
+}
+.view-btn .material-icons { font-size: 16px !important; color: #ea6c0a !important; }
+
+.card-actions {
+  display: flex !important; gap: 12px !important;
+  margin-top: 16px !important; padding-top: 14px !important;
+  border-top: 1px solid #f0f2f5 !important;
+  align-items: center !important;
+}
+
+/* ── Save section — centered, prominent ── */
+.save-section {
+  text-align: center !important;
+  margin-top: 24px !important;
+  padding: 20px !important;
+  background: #ffffff !important; background-color: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+}
+
+.doc-row {
+  display: flex !important; align-items: center !important;
+  gap: 14px !important; margin-top: 8px !important;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .orders-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 700px) {
+  .sidebar { position: relative !important; width: 100% !important; height: auto !important; max-width: 100% !important; }
+  .main-content { margin-left: 0 !important; width: 100% !important; padding: 20px !important; }
+  .orders-grid { grid-template-columns: 1fr !important; }
+  .today-header, .upcoming-header { flex-direction: column !important; align-items: flex-start !important; }
+}
+
+/* ================================================================
+   HARD OVERRIDES — beats any component-scoped CSS
+   Place this at the very bottom so it wins all specificity fights
+   ================================================================ */
+
+/* Force white page background */
+body, .container, .main-content {
+  background: #f5f7fa !important;
+}
+
+/* Force white cards */
+.order-card,
+.today-card,
+.upcoming-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1.5px solid #e4e8ed !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+.order-card:hover,
+.today-card:hover,
+.upcoming-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.09) !important;
+  border-color: #fed7aa !important;
+}
+
+/* Force orange gradient card header */
+.card-header {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  background-image: linear-gradient(135deg, #ea6c0a 0%, #c2540a 100%) !important;
+  color: #ffffff !important;
+  padding: 15px 18px !important;
+  border-bottom: none !important;
+}
+
+.card-header * {
+  color: #ffffff !important;
+}
+
+.card-header b {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  display: block !important;
+  margin-bottom: 3px !important;
+  color: #ffffff !important;
+}
+
+.card-header div {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.88) !important;
+  margin-top: 2px !important;
+}
+
+/* Force white menu-items body */
+.menu-items {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  padding: 16px 18px !important;
+  border-bottom: 1px solid #f0f2f5 !important;
+}
+
+.menu-items div {
+  color: #1a1d23 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  margin-bottom: 2px !important;
+  background: transparent !important;
+}
+
+/* Left border status strips */
+.border-red    { border-left: 4px solid #ef4444 !important; }
+.border-orange { border-left: 4px solid #f59e0b !important; }
+.border-green  { border-left: 4px solid #10b981 !important; }
+
+/* Force sidebar transparent orange */
+.sidebar {
+  background: rgba(249,115,22,0.055) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Force sidebar text colors */
+.cafe-name {
+  color: #ea6c0a !important;
+  -webkit-text-fill-color: #ea6c0a !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.menu li { color: #4a5568 !important; }
+.menu li .material-icons { color: #fb923c !important; }
+.menu li:hover { color: #ea6c0a !important; background: rgba(249,115,22,0.09) !important; }
+
+/* ================================================================
+   PROFILE HARD OVERRIDES — beats component CSS
+   ================================================================ */
+
+/* Header card */
+.profile-container .profile-header,
+.profile-header {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #e4e8ed !important;
+  border-radius: 16px !important;
+  padding: 24px 28px !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+/* Profile icon */
+.profile-icon {
+  background: #ffedd8 !important;
+  background-color: #ffedd8 !important;
+  color: #f97316 !important;
+  border: 2px solid #fed7aa !important;
+  border-radius: 16px !important;
+  width: 66px !important; height: 66px !important;
+}
+.profile-icon .material-icons { color: #f97316 !important; font-size: 30px !important; }
+
+/* Section cards */
+.section {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #e4e8ed !important;
+  border-radius: 16px !important;
+  padding: 24px 28px !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Form inputs */
+.form-group input,
+.form-group select {
+  background: #f5f7fa !important;
+  background-color: #f5f7fa !important;
+  border: 1.5px solid #e4e8ed !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  color: #1a1d23 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.form-group input:focus,
+.form-group select:focus {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-color: #fb923c !important;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.12) !important;
+  outline: none !important;
+}
+
+/* EDIT BUTTON — solid orange, fully visible */
+.edit-btn {
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 11px 28px !important;
+  border-radius: 99px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.38) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.edit-btn:hover {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+}
+
+/* SAVE BUTTON — solid orange, fully visible */
+.save-btn {
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 13px 36px !important;
+  border-radius: 99px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.4) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+.save-btn:hover {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ADD BUTTON */
+.add-btn {
+  background: #fff8f1 !important;
+  background-color: #fff8f1 !important;
+  color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important;
+  padding: 9px 20px !important;
+  border-radius: 99px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* REMOVE BUTTON */
+.remove-btn {
+  background: #fef2f2 !important;
+  background-color: #fef2f2 !important;
+  color: #ef4444 !important;
+  border: 1.5px solid rgba(239,68,68,0.3) !important;
+  padding: 9px 20px !important;
+  border-radius: 99px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Save section wrapper */
+.save-section {
+  text-align: center !important;
+  margin-top: 24px !important;
+  padding: 24px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+}
+
+/* Role & Approved badges */
+.role {
+  background: #fff8f1 !important;
+  background-color: #fff8f1 !important;
+  color: #ea6c0a !important;
+  border: 1.5px solid #fed7aa !important;
+  padding: 4px 14px !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.approved {
+  background: #ecfdf5 !important;
+  background-color: #ecfdf5 !important;
+  color: #10b981 !important;
+  border: 1.5px solid rgba(16,185,129,0.25) !important;
+  padding: 4px 14px !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ================================================================
+   FINAL HARD OVERRIDES — popup, table rows, status badge
+   ================================================================ */
+
+/* ── POPUP — fully solid, no blur ── */
+.popup {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.55) !important;
+  background-color: rgba(0,0,0,0.55) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+}
+
+.popup-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  padding: 32px !important;
+  border-radius: 18px !important;
+  width: 400px !important;
+  max-width: 92vw !important;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12) !important;
+  border: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10000 !important;
+  position: relative !important;
+}
+
+.popup-card h2 {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #1a1d23 !important;
+  margin-bottom: 16px !important;
+  padding-bottom: 14px !important;
+  border-bottom: 2px solid #f0f2f5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  opacity: 1 !important;
+}
+
+.popup-card div {
+  font-size: 14px !important;
+  color: #4a5568 !important;
+  padding: 8px 0 !important;
+  border-bottom: 1px solid #f0f2f5 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+.popup-card button {
+  margin-top: 20px !important;
+  width: 100% !important;
+  padding: 13px !important;
+  border: none !important;
+  border-radius: 99px !important;
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.38) !important;
+  letter-spacing: 0.2px !important;
+}
+
+.popup-card button:hover {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ── TABLE — alternating rows ── */
+.order-table tbody tr:nth-child(odd),
+.table-box tbody tr:nth-child(odd) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.order-table tbody tr:nth-child(even),
+.table-box tbody tr:nth-child(even) {
+  background: rgba(249,115,22,0.05) !important;
+  background-color: rgba(249,115,22,0.05) !important;
+}
+
+.order-table tbody tr:hover,
+.table-box tbody tr:hover {
+  background: rgba(249,115,22,0.10) !important;
+  background-color: rgba(249,115,22,0.10) !important;
+}
+
+/* ── COMPLETED STATUS BADGE — orange transparent ── */
+.status,
+.status.completed {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 5px 14px !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  background: rgba(249,115,22,0.12) !important;
+  background-color: rgba(249,115,22,0.12) !important;
+  color: #c2540a !important;
+  border: 1.5px solid rgba(249,115,22,0.28) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ================================================================
+   FINAL HARD OVERRIDES — ALL REMAINING ISSUES
+   ================================================================ */
+
+/* ── 1. ORDER CARD: orange header only, white body ── */
+.order-card,
+.today-card,
+.upcoming-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1.5px solid #e4e8ed !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+/* Orange header ONLY */
+.order-card .card-header,
+.today-card .card-header,
+.upcoming-card .card-header,
+div.card-header {
+  background: #ea6c0a !important;
+  background-color: #ea6c0a !important;
+  background-image: linear-gradient(135deg, #ea6c0a 0%, #c2540a 100%) !important;
+  color: #ffffff !important;
+  padding: 15px 18px !important;
+  border: none !important;
+}
+
+.card-header *,
+.order-card .card-header *,
+div.card-header * { color: #ffffff !important; }
+
+.card-header b { font-size: 16px !important; font-weight: 700 !important; display: block !important; }
+.card-header div { font-size: 12px !important; opacity: 0.88 !important; margin-top: 2px !important; }
+
+/* White body */
+.order-card .menu-items,
+.today-card .menu-items,
+.upcoming-card .menu-items,
+div.menu-items {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #1a1d23 !important;
+  padding: 16px 18px !important;
+  flex: 1 !important;
+}
+
+.menu-items div,
+.order-card .menu-items div {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #1a1d23 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+}
+
+/* ── 2. STATUS BORDER STRIPS ── */
+.border-red    { border-left: 4px solid #ef4444 !important; }
+.border-orange { border-left: 4px solid #f59e0b !important; }
+.border-green  { border-left: 4px solid #10b981 !important; }
+
+/* ── 3. STATUS BUTTONS — fully opaque, no transparency ── */
+.status-btn {
+  width: 88% !important; margin: 13px auto !important;
+  display: block !important; padding: 11px !important;
+  border-radius: 99px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important; font-weight: 700 !important;
+  cursor: pointer !important; text-transform: uppercase !important;
+  letter-spacing: 0.6px !important; transition: all 0.2s !important;
+  opacity: 1 !important; visibility: visible !important;
+}
+
+.pending-btn {
+  background: #fef2f2 !important; background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+  border: 2px solid #fca5a5 !important;
+  opacity: 1 !important;
+}
+.pending-btn:hover {
+  background: #fee2e2 !important; background-color: #fee2e2 !important;
+  border-color: #ef4444 !important; transform: translateY(-1px) !important;
+}
+
+.preparing-btn {
+  background: #fffbeb !important; background-color: #fffbeb !important;
+  color: #b45309 !important;
+  border: 2px solid #fcd34d !important;
+  opacity: 1 !important;
+}
+.preparing-btn:hover {
+  background: #fef3c7 !important; background-color: #fef3c7 !important;
+  border-color: #f59e0b !important; transform: translateY(-1px) !important;
+}
+
+.completed-btn {
+  background: #ecfdf5 !important; background-color: #ecfdf5 !important;
+  color: #059669 !important;
+  border: 2px solid #6ee7b7 !important;
+  opacity: 1 !important;
+}
+.completed-btn:hover {
+  background: #d1fae5 !important; background-color: #d1fae5 !important;
+  border-color: #10b981 !important; transform: translateY(-1px) !important;
+}
+
+/* ── 4. TABLE: COMPLETED badge in orange, alternating rows ── */
+.status.completed {
+  background: rgba(249,115,22,0.12) !important;
+  background-color: rgba(249,115,22,0.12) !important;
+  color: #ea6c0a !important;
+  border: 1.5px solid rgba(249,115,22,0.3) !important;
+  padding: 5px 14px !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Alternating rows: even = very light orange, odd = white */
+.order-table tbody tr:nth-child(even),
+.table-box table tbody tr:nth-child(even) {
+  background: rgba(249,115,22,0.05) !important;
+  background-color: rgba(249,115,22,0.05) !important;
+}
+
+.order-table tbody tr:nth-child(odd),
+.table-box table tbody tr:nth-child(odd) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+/* Remove the generic hover to let alternating colors show, add subtle orange hover */
+.order-table tbody tr:hover,
+.table-box table tbody tr:hover {
+  background: rgba(249,115,22,0.10) !important;
+  background-color: rgba(249,115,22,0.10) !important;
+}
+
+/* ── 5. FILTER BUTTONS — solid orange when active ── */
+.filters button.active {
+  background: #f97316 !important;
+  background-color: #f97316 !important;
+  background-image: none !important;
+  border-color: #f97316 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  box-shadow: 0 3px 10px rgba(249,115,22,0.35) !important;
+}
+.filters button:not(.active) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #e4e8ed !important;
+  color: #4a5568 !important;
+  opacity: 1 !important;
+}
+
+/* ── 6. POPUP — fully opaque white card ── */
+.popup {
+  position: fixed !important; inset: 0 !important;
+  background: rgba(0,0,0,0.55) !important;
+  backdrop-filter: none !important;
+  z-index: 9999 !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+}
+
+.popup-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 18px !important;
+  padding: 32px !important;
+  width: 380px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+  border: 1.5px solid #e4e8ed !important;
+  z-index: 10000 !important;
+  position: relative !important;
+}
+
+.popup-card h2 {
+  font-size: 18px !important; font-weight: 800 !important;
+  color: #1a1d23 !important; margin-bottom: 16px !important;
+  padding-bottom: 12px !important; border-bottom: 2px solid #f0f2f5 !important;
+  background: transparent !important;
+}
+
+.popup-card > div {
+  background: transparent !important; background-color: transparent !important;
+  color: #4a5568 !important; font-size: 14px !important; font-weight: 500 !important;
+  padding: 8px 0 !important; border-bottom: 1px solid #f0f2f5 !important;
+}
+
+.popup-card button {
+  margin-top: 20px !important; width: 100% !important;
+  padding: 13px !important; border: none !important; border-radius: 99px !important;
+  background: #f97316 !important; background-color: #f97316 !important;
+  background-image: none !important;
+  color: #ffffff !important; font-size: 15px !important; font-weight: 700 !important;
+  cursor: pointer !important; opacity: 1 !important; visibility: visible !important;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.4) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.popup-card button:hover {
+  background: #ea6c0a !important; background-color: #ea6c0a !important;
+  transform: translateY(-1px) !important;
+}
+.welcome-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #e4e8ed !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  padding: 20px 28px !important;
+  margin-bottom: 24px !important;
+}
+
+.welcome-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+}
+
+.welcome-icon {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 14px !important;
+  background: #ffedd8 !important;
+  background-color: #ffedd8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #fed7aa !important;
+  flex-shrink: 0 !important;
+}
+
+.welcome-icon .material-icons {
+  font-size: 26px !important;
+  color: #f97316 !important;
+}
+
+.welcome-title {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #1a1d23 !important;
+  letter-spacing: -0.3px !important;
+  margin: 0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.welcome-sub {
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+  margin-top: 3px !important;
+  font-weight: 400 !important;
+}
+/* Completed header row */
+.completed-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 18px 20px !important;
+  border-bottom: 1.5px solid var(--border) !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+.completed-controls {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.clear-date-btn {
+  padding: 8px 16px !important;
+  border: 1.5px solid var(--orange-200) !important;
+  border-radius: 99px !important;
+  background: var(--orange-50) !important;
+  color: var(--orange-700) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background .15s !important;
+}
+.clear-date-btn:hover { background: var(--orange-100) !important; }
+
+.completed-count {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: var(--surface) !important;
+  padding: 8px 16px !important;
+  border-radius: 99px !important;
+  border: 1.5px solid var(--border) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+.completed-count .material-icons { font-size: 17px !important; color: var(--orange-400) !important; }
+.completed-count b { color: var(--orange-600) !important; font-size: 15px !important; }
+/* Add to your chef-dashboard.css */
+.completed-pagination {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: 20px !important;
+  padding: 12px 0 !important;
+}
+
+.completed-pagination button {
+  min-width: 36px !important;
+  height: 36px !important;
+  border: 1.5px solid var(--orange-400) !important;
+  border-radius: 8px !important;
+  background: var(--surface) !important;
+  color: var(--orange-600) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.18s !important;
+  padding: 0 10px !important;
+}
+
+.completed-pagination button:hover:not(:disabled) {
+  background: var(--orange-500) !important;
+  border-color: var(--orange-500) !important;
+  color: #fff !important;
+}
+
+.completed-pagination button.active {
+  background: var(--orange-500) !important;
+  border-color: var(--orange-500) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(249,115,22,0.35) !important;
+}
+
+.completed-pagination button:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  border-color: var(--border) !important;
+  color: var(--text-muted) !important;
+}
+
+.pg-ellipsis {
+  font-size: 14px !important;
+  color: var(--text-muted) !important;
+  padding: 0 4px !important;
+}
+
+/* Date picker border */
+.completed-controls .date-picker {
+  border: 1.5px solid var(--orange-400) !important;
+  border-radius: 10px !important;
+  padding: 8px 14px !important;
+  background: var(--surface) !important;
+}
+
+.completed-controls .date-picker:focus-within {
+  border-color: var(--orange-500) !important;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.12) !important;
+}
+
+/* Clear button border */
+.clear-date-btn {
+  border: 1.5px solid var(--orange-400) !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  background: var(--orange-50) !important;
+  color: var(--orange-600) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.clear-date-btn:hover {
+  background: var(--orange-100) !important;
+  border-color: var(--orange-500) !important;
+}
+
+/* Total count border */
+.completed-count {
+  border: 1.5px solid var(--orange-400) !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  background: var(--orange-50) !important;
+  color: var(--orange-600) !important;
+  font-weight: 600 !important;
+}
+
+.completed-count b {
+  color: var(--orange-600) !important;
+  font-size: 15px !important;
+}
